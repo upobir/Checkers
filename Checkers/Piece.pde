@@ -23,7 +23,8 @@ class Piece{
         strokeWeight(2);
         float diamX = 0.75*cellWidth;        
         float diamY = 0.75*cellHeight;
-        fill(lightPieceColor);
+        if(side == ColorSide.LIGHT)  fill(lightPieceColor);
+        else                         fill(darkPieceColor);
         ellipse(x, y, diamX, diamY);
     }
 }
