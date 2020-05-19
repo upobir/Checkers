@@ -81,7 +81,10 @@ class Game{
         float y = map(my, ylo, yhi, 0, gridSz);
         int j = Math.round(x-0.5+0.001);
         int i = Math.round(y-0.5+0.001);
-        highlightedPiece = board[i][j];
+        Piece cell = (whiteFront)? board[i][j] : board[gridSz-1-i][gridSz-1-j];
+        if(cell == null) return;
+        if(cell == highlightedPiece) highlightedPiece = null;
+        else                         highlightedPiece = cell;
     }
     
 }
