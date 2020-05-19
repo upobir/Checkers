@@ -35,7 +35,11 @@ class Piece{
         ellipse(x, y, diamX, diamY);
     }
     
-    public void highlight(){
-        
+    public void highlight(color highlightColor){
+        ellipseMode(CENTER);
+        noFill();
+        stroke(highlightColor);
+        strokeWeight(6);
+        ellipse(x, y, diamX, diamY);
     }
 }

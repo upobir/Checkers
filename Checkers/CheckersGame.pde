@@ -1,7 +1,7 @@
 class Game{
     final color lightCellColor = color(255, 238, 187);
     final color darkCellColor = color(85, 136, 34);
-    final color highlightColor = color(255, 255, 0, 10);
+    final color highlightColor = color(255, 255, 0);
     
     final int gridSz = 8;
     Piece board[][];
@@ -67,10 +67,21 @@ class Game{
             }
     }
     
+    //drawing highlighted pieces and cells
     private void drawHightlights(){
         if(highlightedPiece != null){
-            highlightedPiece.highlight();
+            highlightedPiece.highlight(highlightColor);
         }
+    }
+    
+    public void interactMouse(float mx, float my){
+        if(mx != constrain(mx, xlo, xhi) || my != constrain(my, ylo, yhi)) return;
+        
+        float x = map(mx, xlo, xhi, 0, gridSz);
+        float y = map(my, ylo, yhi, 0, gridSz);
+        int j = Math.round(x-0.5+0.001);
+        int i = Math.round(y-0.5+0.001);
+        highlightedPiece = board[i][j];
     }
     
 }
