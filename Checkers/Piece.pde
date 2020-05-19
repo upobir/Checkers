@@ -10,6 +10,9 @@ class Piece{
     final color lightPieceColor = color(255, 249, 244);
     final color darkPieceColor = color(196, 0, 3);
     
+    //movement directions in IJ
+    int[][] movementVector;
+    
     //drawing variables
     float x, y;
     float diamX, diamY;
@@ -19,6 +22,10 @@ class Piece{
     Piece(COLOR side_, TYPE type_){
         side = side_;
         type = type_;
+        if(side == COLOR.LIGHT) 
+            movementVector = new int[][]{ {-1, 1}, {-1, -1} };
+        else
+            movementVector = new int[][]{ {1, 1}, {1, -1} };
     }
     
     //to draw the pieces.
@@ -39,6 +46,7 @@ class Piece{
         }
     }
     
+    //drawing the crown for king pieces
     private void drawCrown(){
         pushMatrix();
         translate(x, y);
@@ -69,11 +77,24 @@ class Piece{
         popMatrix();
     }
     
+    //highlight selected piece
     public void highlight(color highlightColor){
         ellipseMode(CENTER);
         noFill();
         stroke(highlightColor);
-        strokeWeight(6);
+        strokeWeight(6);            //make stroke weight varying
         ellipse(x, y, diamX, diamY);
+    }
+    
+    //get a list of legal moves not considering other pieces.
+    public List<Move> getMoves(int i, int j, int gridSz){
+        List<Move> ret = new LinkedList<Move>();
+        for(int [] vec: movementVector){
+            int ni = i+vec[0], nj = j+vec[1];
+            if(0 <= ni && ni < gridSz && 0 <= nj && nj < gridSz){
+                ret.add(new Move(i, j, ni, nj));
+            }
+        }
+        return ret;
     }
 }
