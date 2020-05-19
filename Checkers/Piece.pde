@@ -1,8 +1,8 @@
-enum ColorSide{
+enum COLOR{
     LIGHT, DARK
 }
 
-enum Type{
+enum TYPE{
     SOLDIER, KING
 }
 
@@ -14,9 +14,9 @@ class Piece{
     float x, y;
     float diamX, diamY;
     
-    ColorSide side;
-    Type type;
-    Piece(ColorSide side_, Type type_){
+    COLOR side;
+    TYPE type;
+    Piece(COLOR side_, TYPE type_){
         side = side_;
         type = type_;
     }
@@ -30,9 +30,23 @@ class Piece{
         y = y_;
         diamX = 0.75*cellWidth;        
         diamY = 0.75*cellHeight;
-        if(side == ColorSide.LIGHT)  fill(lightPieceColor);
-        else                         fill(darkPieceColor);
+        if(side == COLOR.LIGHT)  fill(lightPieceColor);
+        else                     fill(darkPieceColor);
         ellipse(x, y, diamX, diamY);
+        
+        if(type == TYPE.KING){
+            drawCrown();
+        }
+    }
+    
+    private void drawCrown(){
+        pushMatrix();
+        translate(x, y);
+        stroke(0);
+        strokeWeight(1);
+        if(side == COLOR.LIGHT)  fill(darkPieceColor);
+        else                     fill(lightPieceColor);
+        popMatrix();
     }
     
     public void highlight(color highlightColor){
