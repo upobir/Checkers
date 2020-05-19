@@ -18,8 +18,8 @@ class Game{
         for(int i = 0; i<gridSz; i++)
             for(int j = 0; j<gridSz; j++){
                 if((i+j)%2 == 0) continue;
-                if(i < 3) board[i][j] = new Piece(COLOR.DARK, TYPE.KING);
-                if(i >= gridSz-3) board[i][j] = new Piece(COLOR.LIGHT, TYPE.KING);
+                if(i < 3) board[i][j] = new Piece(COLOR.DARK, TYPE.SOLDIER);
+                if(i >= gridSz-3) board[i][j] = new Piece(COLOR.LIGHT, TYPE.SOLDIER);
             }
         highlightedPiece = board[1][0];
     }

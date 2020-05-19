@@ -43,9 +43,29 @@ class Piece{
         pushMatrix();
         translate(x, y);
         stroke(0);
-        strokeWeight(1);
-        if(side == COLOR.LIGHT)  fill(darkPieceColor);
-        else                     fill(lightPieceColor);
+        strokeWeight(2);
+        fill(255, 255, 0);
+        //if(side == COLOR.LIGHT)  fill(darkPieceColor);
+        //else                     fill(lightPieceColor);
+        //noFill();
+        
+        float bottomHalf = 0.22;
+        float topHalf = 0.28;
+        float heightHalf = 0.15;
+        float crownMiddleHalf = 0.115;
+        
+        beginShape();
+        //base of the crown
+        vertex(-diamX*bottomHalf, diamY*heightHalf);
+        vertex(diamX*bottomHalf, diamY*heightHalf);
+        
+        vertex(diamX*topHalf, -diamY*heightHalf);    //going up
+        vertex(diamX*crownMiddleHalf, 0);            //going down
+        vertex(0, -diamY*heightHalf);                //going up
+        vertex(-diamX*crownMiddleHalf, 0);           //going down
+        vertex(-diamX*topHalf, -diamY*heightHalf);   //going up
+        endShape(CLOSE);
+        
         popMatrix();
     }
     
