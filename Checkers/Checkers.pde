@@ -1,10 +1,10 @@
-CheckersGame game;
+Game game;
 float boardsz = 850; //board size for drawing
 
 void setup(){
     size(1200, 900);
     background(50);
-    game = new CheckersGame();
+    game = new Game();
     surface.setResizable(true);
 }
 
