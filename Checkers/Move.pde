@@ -1,6 +1,6 @@
 class Move{
     int[] from, to;
-    Piece captured;
+    Piece capturedPiece;
     
     Move(int fi, int fj, int ti, int tj){
         from = new int[]{ fi, fj };
@@ -8,6 +8,6 @@ class Move{
     }
     
     public void setCaptured(Piece cap){
-        captured = cap;
+        capturedPiece = cap;
     }
 }

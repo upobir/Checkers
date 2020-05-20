@@ -29,7 +29,8 @@ class Game{
                 if(i < 3) board[i][j] = new Piece(COLOR.DARK, TYPE.SOLDIER);
                 if(i >= gridSz-3) board[i][j] = new Piece(COLOR.LIGHT, TYPE.SOLDIER);
                 if(board[i][j] != null) activePieces.put( board[i][j], new int[]{i, j} );
-            }
+            }    
+        
         highlightedPiece = null;
         setPlayer(COLOR.LIGHT);
     }
@@ -46,6 +47,7 @@ class Game{
         
         drawBoard();
         drawPieces();
+        drawHighlights();
     }
     
     //draws board given bounding box
@@ -79,26 +81,19 @@ class Game{
                      }
                      
                      cellPiece.draw(x, y, cellWidth, cellHeight);     //TODO use same diameter
-                     
-                     if(highlightedPiece == cellPiece){
-                         drawHighlights(i, j);
-                     }
                 }
             }
     }
     
     //drawing highlighted pieces and cells
-    private void drawHighlights(int hi, int hj){
-        assert highlightedPiece != null;
+    private void drawHighlights(){
+        if(highlightedPiece == null) return;
         
         highlightedPiece.highlight(highlightColor);
-        
-        for(Move move: validMoves){
-            if(hi != move.from[0] || hj != move.from[1]) 
-                continue;
+
+        List<Move> highlightMoves = getValidMovesFor(highlightedPiece);        
+        for(Move move: highlightMoves){
             int i = move.to[0], j = move.to[1];
-            
-            
             float y = map(i+0.5, 0, gridSz, ylo, yhi);
             float x = map(j+0.5, 0, gridSz, xlo, xhi);
             if(!whiteFront){
@@ -111,6 +106,24 @@ class Game{
             strokeWeight(6);        //TODO make stroke weight varying
             rectMode(CENTER);
             rect(x, y, cellWidth, cellHeight);
+            
+            
+            /*if(move.capturedPiece != null){
+                int capi = (move.to[0] + move.from[0])/2;
+                int capj = (move.to[1] + move.from[1])/2;
+                float capy = map(capi+0.5, 0, gridSz, ylo, yhi);
+                float capx = map(capj+0.5, 0, gridSz, xlo, xhi);
+                if(!whiteFront){
+                    x = xlo + xhi - x;
+                    y = ylo + yhi - y;
+                }
+                
+                noFill();
+                stroke(0);
+                strokeWeight(6);
+                rectMode(CENTER);
+                rect(capx, capy, cellWidth, cellHeight);
+            }*/
         }
         
     }
