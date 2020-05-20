@@ -26,9 +26,10 @@ class Game{
         for(int i = 0; i<gridSz; i++)
             for(int j = 0; j<gridSz; j++){            //Initializing dark pieces on row 0, 1, 2 & light pieces on row 5, 6, 7
                 if((i+j)%2 == 0) continue;
-                if(i < 3) board[i][j] = new Piece(COLOR.DARK, TYPE.SOLDIER);
-                if(i >= gridSz-3) board[i][j] = new Piece(COLOR.LIGHT, TYPE.SOLDIER);
-                if(board[i][j] != null) activePieces.put( board[i][j], new int[]{i, j} );
+                if(i < 3) 
+                    changePiecePosition(new Piece(COLOR.DARK, TYPE.SOLDIER), null, new int[]{i, j});
+                if(i >= gridSz-3) 
+                    changePiecePosition(new Piece(COLOR.LIGHT, TYPE.SOLDIER), null, new int[]{i, j});
             }    
         
         highlightedPiece = null;
@@ -221,6 +222,8 @@ class Game{
         
     }
     
+    
+    //debugging the board
     public void debugBoard(){
         for(int i = 0; i<gridSz; i++){
             for(int j = 0; j<gridSz; j++){

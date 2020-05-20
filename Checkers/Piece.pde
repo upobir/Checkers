@@ -100,6 +100,7 @@ class Piece{
                     ret.add(new Move(i, j, newi, newj));
                 else if(board[newi][newj].pieceColor != this.pieceColor){
                     int capi = newi+vec[0], capj = newj + vec[1];
+                    
                     if(isInside(board, capi, capj) && board[capi][capj] == null){
                         Move move = new Move(i, j, capi, capj);
                         move.setCaptured(board[newi][newj]);
@@ -111,6 +112,7 @@ class Piece{
         return ret;
     }
     
+    //helper fucntion
     private boolean isInside(Piece[][] board, int i,int j){
         return (0 <= i && i <= board.length && 0 <= j && j < board[i].length);
     }
