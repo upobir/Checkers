@@ -28,4 +28,5 @@ void keyPressed(){
     if(key == ' '){
         frontWhite = !frontWhite;
     }
+    else if(key == '\n') game.debugBoard();
 }

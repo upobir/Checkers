@@ -137,6 +137,8 @@ class Game{
             List<Move> movesForPiece = entry.getKey().getMoves(board, i, j);
             validMoves.addAll(movesForPiece);
         }
+        
+        if(validMoves.isEmpty()) println("no more moves possible");
     }
     
     //get valid moves for one piece.
@@ -157,11 +159,14 @@ class Game{
             mx = xlo + xhi - mx;
             my = ylo + yhi - my;
         }
+        //reverse has been handled assume normal view
         
         float x = map(mx, xlo, xhi, 0, gridSz);
         float y = map(my, ylo, yhi, 0, gridSz);
         int j = Math.round(x-0.5+0.001);
         int i = Math.round(y-0.5+0.001);
+        //[i][j] is the cell clicked on 
+        
         Piece cellPiece = board[i][j];
         
         if(cellPiece != null){
@@ -170,5 +175,63 @@ class Game{
             else if(cellPiece.pieceColor == currentPlayerColor && !getValidMovesFor(cellPiece).isEmpty()) 
                 highlightedPiece = cellPiece;
         }
+        else{
+            if(highlightedPiece != null){
+                List<Move> interactableMoves = getValidMovesFor(highlightedPiece);
+                for(Move move: interactableMoves){
+                    if(move.to[0] == i && move.to[1] == j){
+                        applyMove(move);
+                        highlightedPiece = null;
+                    }
+                }
+            }
+        }
     }
+    
+    
+    //applying a move
+    public boolean applyMove(Move move){
+        //TODO check if move is valid, inefficient?
+        if(!validMoves.contains(move)) return false;
+        
+        Piece movingPiece = board[move.from[0]][move.from[1]];
+        changePiecePosition(movingPiece, move.from, move.to);
+        
+        setPlayer(COLOR.LIGHT);
+        
+        return true;
+    }
+    
+    //chaging piece position by inserting it, deleting it or just changing it.
+    private void changePiecePosition(Piece piece, int[] from, int to[]){
+        //TODO remove these asserts before finishing
+        assert from != null || to != null;
+        if(from != null) assert board[from[0]][from[1]] == piece;
+        if(to != null) assert board[to[0]][to[1]] == null;
+        
+        if(from != null) 
+            board[from[0]][from[1]] = null;
+            
+        if(to != null){ 
+            board[to[0]][to[1]] = piece;
+            activePieces.put(piece, to);
+        }
+        else
+            activePieces.remove(piece);
+        
+    }
+    
+    public void debugBoard(){
+        for(int i = 0; i<gridSz; i++){
+            for(int j = 0; j<gridSz; j++){
+                if(board[i][j] == null) print(" - ");
+                else if(board[i][j].pieceColor == COLOR.LIGHT) print(" L ");
+                else print(" D ");
+            }
+            println();
+        }
+        println();
+        println();
+    }
+    
 }
