@@ -17,12 +17,14 @@ class Piece{
     float x, y;
     float diamX, diamY;
     
-    COLOR side;
+    COLOR pieceColor;
     TYPE type;
-    Piece(COLOR side_, TYPE type_){
-        side = side_;
+    Piece(COLOR pieceColor_, TYPE type_){
+        pieceColor = pieceColor_;
         type = type_;
-        if(side == COLOR.LIGHT) 
+        if(type == TYPE.KING)
+            movementVector = new int[][]{ {-1, 1}, {-1, -1}, {1, -1}, {1, 1} };
+        else if(pieceColor == COLOR.LIGHT) 
             movementVector = new int[][]{ {-1, 1}, {-1, -1} };
         else
             movementVector = new int[][]{ {1, 1}, {1, -1} };
@@ -37,8 +39,8 @@ class Piece{
         y = y_;
         diamX = 0.75*cellWidth;        
         diamY = 0.75*cellHeight;
-        if(side == COLOR.LIGHT)  fill(lightPieceColor);
-        else                     fill(darkPieceColor);
+        if(pieceColor == COLOR.LIGHT)  fill(lightPieceColor);
+        else                           fill(darkPieceColor);
         ellipse(x, y, diamX, diamY);
         
         if(type == TYPE.KING){
