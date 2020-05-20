@@ -126,6 +126,17 @@ class Game{
         }
     }
     
+    //get valid moves for one piece.
+    private List<Move> getValidMovesFor(Piece piece){
+        List<Move> ret = new LinkedList<Move>();
+        for(Move move: validMoves){
+            int[] pos = move.from;
+            if(board[pos[0]][pos[1]] == piece)
+                ret.add(move);
+        }
+        return ret;
+    }
+    
     //interact with mouse press
     public void interactMouse(float mx, float my){
         if(mx != constrain(mx, xlo, xhi) || my != constrain(my, ylo, yhi)) return;
@@ -143,7 +154,7 @@ class Game{
         if(cellPiece != null){
             if(cellPiece == highlightedPiece)
                 highlightedPiece = null;
-            else if(cellPiece.pieceColor == currentPlayerColor) 
+            else if(cellPiece.pieceColor == currentPlayerColor && !getValidMovesFor(cellPiece).isEmpty()) 
                 highlightedPiece = cellPiece;
         }
     }
