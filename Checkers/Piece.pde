@@ -10,15 +10,16 @@ class Piece{
     final color lightPieceColor = color(255, 249, 244);
     final color darkPieceColor = color(196, 0, 3);
     
-    //movement directions in IJ
+    //piece game properties
     int[][] movementVector;
+    COLOR pieceColor;
+    TYPE type;
     
     //drawing variables
     float x, y;
     float diamX, diamY;
     
-    COLOR pieceColor;
-    TYPE type;
+    
     Piece(COLOR pieceColor_, TYPE type_){
         pieceColor = pieceColor_;
         type = type_;
@@ -88,15 +89,29 @@ class Piece{
         ellipse(x, y, diamX, diamY);
     }
     
-    //get a list of legal moves not considering other pieces.
-    public List<Move> getMoves(int i, int j, int gridSz){
+    //get a list of legal moves considering other pieces.
+    public List<Move> getMoves(Piece[][] board, int i, int j){
         List<Move> ret = new LinkedList<Move>();
         for(int [] vec: movementVector){
-            int ni = i+vec[0], nj = j+vec[1];
-            if(0 <= ni && ni < gridSz && 0 <= nj && nj < gridSz){
-                ret.add(new Move(i, j, ni, nj));
+            int newi = i+vec[0], newj = j+vec[1];
+            
+            if(isInside(board, newi, newj)){
+                if(board[newi][newj] == null)
+                    ret.add(new Move(i, j, newi, newj));
+                else if(board[newi][newj].pieceColor != this.pieceColor){
+                    int capi = newi+vec[0], capj = newj + vec[1];
+                    if(isInside(board, capi, capj) && board[capi][capj] == null){
+                        Move move = new Move(i, j, capi, capj);
+                        move.setCaptured(board[newi][newj]);
+                        ret.add(move);
+                    }
+                }
             }
         }
         return ret;
+    }
+    
+    private boolean isInside(Piece[][] board, int i,int j){
+        return (0 <= i && i <= board.length && 0 <= j && j < board[i].length);
     }
 }

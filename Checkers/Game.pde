@@ -121,7 +121,7 @@ class Game{
         validMoves.clear();
         for(Map.Entry<Piece, int[]> entry: activePieces.entrySet()){
             int i = entry.getValue()[0], j = entry.getValue()[1];
-            List<Move> movesForPiece = entry.getKey().getMoves(i, j, gridSz);
+            List<Move> movesForPiece = entry.getKey().getMoves(board, i, j);
             validMoves.addAll(movesForPiece);
         }
     }
