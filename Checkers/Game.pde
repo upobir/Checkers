@@ -37,6 +37,7 @@ class Game{
     
     //draw function to be called with x, y bounds of drawing space and boolean of whether white is front.
     public void draw(float centerX, float centerY, float boardSz, boolean whiteFront_){
+        borderSpace = boardSz*0.05;
         xlo = centerX - boardSz/2;
         xhi = centerX + boardSz/2;
         ylo = centerY - boardSz/2;
