@@ -75,11 +75,13 @@ class Piece{
     }
     
     //highlight selected piece
-    public void highlight(color highlightColor){
+    public void highlight(color highlightColor, boolean isPieceSelected){
         ellipseMode(CENTER);
         noFill();
         stroke(highlightColor);
-        strokeWeight(6);            //TODO make stroke weight varying
+        //TODO make stroke weight varying
+        if(isPieceSelected)  strokeWeight(6);
+        else                 strokeWeight(4);
         ellipse(x, y, diam, diam);
     }
     

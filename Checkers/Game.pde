@@ -2,6 +2,7 @@ class Game{
     final color lightCellColor = color(255, 238, 187);
     final color darkCellColor = color(85, 136, 34);
     final color highlightColor = color(255, 255, 0);
+    final color availableMoveColor = color(0, 0, 0);
     final int gridSz = 8;
     
     //game variables
@@ -96,13 +97,13 @@ class Game{
     //drawing highlighted pieces and cells
     private void drawHighlights(){
         
-        /*for(Move move : validMoves){
-            board[move.from[0]][move.from[1]].highlight(color(0));
-        }*/
+        for(Move move : validMoves){
+            board[move.from[0]][move.from[1]].highlight(availableMoveColor, false);
+        }
         
         if(highlightedPiece == null) return;
         
-        highlightedPiece.highlight(highlightColor);
+        highlightedPiece.highlight(highlightColor, true);
 
         List<Move> highlightMoves = getValidMovesFor(highlightedPiece);        
         for(Move move: highlightMoves){
@@ -159,8 +160,6 @@ class Game{
             List<Move> movesForPiece = entry.getKey().getMoves(board, i, j);
             validMoves.addAll(movesForPiece);
         }
-        
-        println(validMoves.size());
         
         ArrayList<Move> capturingMoves = new ArrayList<Move>();
         for(Move move : validMoves){
