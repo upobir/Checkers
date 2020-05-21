@@ -37,11 +37,11 @@ class Game{
     }
     
     //draw function to be called with x, y bounds of drawing space and boolean of whether white is front.
-    public void draw(float xlo_, float ylo_, float xhi_, float yhi_, boolean whiteFront_){    //TODO check if square
-        xlo = xlo_;
-        ylo = ylo_;
-        xhi = xhi_;
-        yhi = yhi_;
+    public void draw(float centerX, float centerY, float boardSz, boolean whiteFront_){    //TODO check if square
+        xlo = centerX - boardSz/2;
+        xhi = centerX + boardSz/2;
+        ylo = centerY - boardSz/2;
+        yhi = centerY + boardSz/2;
         whiteFront = whiteFront_;
         cellWidth = (xhi - xlo) /gridSz;
         cellHeight = (yhi - ylo) /gridSz;
@@ -65,6 +65,7 @@ class Game{
                 float y = map(i+0.5, 0, gridSz, ylo, yhi);
                 rect(x, y, cellWidth, cellHeight);
             }
+        
     }
     
     //draws pieces given bounding box of board.
@@ -198,7 +199,8 @@ class Game{
         Piece movingPiece = board[move.from[0]][move.from[1]];
         changePiecePosition(movingPiece, move.from, move.to);
         
-        setPlayer(COLOR.LIGHT);
+        if(currentPlayerColor == COLOR.LIGHT) setPlayer(COLOR.DARK);
+        else                                  setPlayer(COLOR.LIGHT);
         
         return true;
     }

@@ -1,14 +1,8 @@
-enum COLOR{
-    LIGHT, DARK
-}
-
 enum TYPE{
     SOLDIER, KING
 }
 
 class Piece{
-    final color lightPieceColor = color(255, 249, 244);
-    final color darkPieceColor = color(196, 0, 3);
     
     //piece game properties
     int[][] movementVector;
@@ -40,8 +34,9 @@ class Piece{
         y = y_;
         diamX = 0.75*cellWidth;        
         diamY = 0.75*cellHeight;
-        if(pieceColor == COLOR.LIGHT)  fill(lightPieceColor);
-        else                           fill(darkPieceColor);
+        /*if(pieceColor == COLOR.LIGHT)  fill(lightPieceColor);
+        else                           fill(darkPieceColor);*/
+        fill(pieceColor.drawColor);
         ellipse(x, y, diamX, diamY);
         
         if(type == TYPE.KING){
