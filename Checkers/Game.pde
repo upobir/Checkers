@@ -8,12 +8,12 @@ class Game{
     Piece board[][];
     Map<Piece, int[]> activePieces;        //TODO maybe set this to different maps for different colors?
     COLOR currentPlayerColor;
-    List<Move> validMoves;
+    ArrayList<Move> validMoves;
     
     //drawing variables
     float xlo, ylo, xhi, yhi;
     boolean whiteFront;
-    float cellSize;
+    float cellSize, borderSpace;
     
     //IO variables
     Piece highlightedPiece;
@@ -37,13 +37,14 @@ class Game{
     
     //draw function to be called with x, y bounds of drawing space and boolean of whether white is front.
     public void draw(float centerX, float centerY, float boardSz, boolean whiteFront_){
-        borderSpace = boardSz*0.05;
-        xlo = centerX - boardSz/2;
-        xhi = centerX + boardSz/2;
-        ylo = centerY - boardSz/2;
-        yhi = centerY + boardSz/2;
+        borderSpace = boardSz*0.011;
+        float innerBoardSz = boardSz - borderSpace*2; 
+        xlo = centerX - innerBoardSz/2;
+        xhi = centerX + innerBoardSz/2;
+        ylo = centerY - innerBoardSz/2;
+        yhi = centerY + innerBoardSz/2;
         whiteFront = whiteFront_;
-        cellSize = boardSz / gridSz;
+        cellSize = innerBoardSz / gridSz;
         
         drawBoard();
         drawPieces();
@@ -55,8 +56,7 @@ class Game{
         rectMode(CORNERS);
         fill(currentPlayerColor.drawColor);
         noStroke();
-        float space = cellSize * 0.08;
-        rect(xlo - space, ylo - space, xhi + space, yhi + space);
+        rect(xlo - borderSpace, ylo - borderSpace, xhi + borderSpace, yhi + borderSpace);
         
         
         rectMode(CENTER);
@@ -95,6 +95,11 @@ class Game{
     
     //drawing highlighted pieces and cells
     private void drawHighlights(){
+        
+        /*for(Move move : validMoves){
+            board[move.from[0]][move.from[1]].highlight(color(0));
+        }*/
+        
         if(highlightedPiece == null) return;
         
         highlightedPiece.highlight(highlightColor);
@@ -140,14 +145,33 @@ class Game{
     //setiing current playing side.
     private void setPlayer(COLOR side){
         currentPlayerColor = side;
+        computeValidMoves();
+        if(validMoves.isEmpty()) println("no more moves possible");
+    }
+    
+    //computing valid moves for current player.
+    private void computeValidMoves(){
         validMoves.clear();
         for(Map.Entry<Piece, int[]> entry: activePieces.entrySet()){
+            if(entry.getKey().pieceColor != currentPlayerColor) continue;
+            
             int i = entry.getValue()[0], j = entry.getValue()[1];
             List<Move> movesForPiece = entry.getKey().getMoves(board, i, j);
             validMoves.addAll(movesForPiece);
         }
         
-        if(validMoves.isEmpty()) println("no more moves possible");
+        println(validMoves.size());
+        
+        ArrayList<Move> capturingMoves = new ArrayList<Move>();
+        for(Move move : validMoves){
+            if(move.isCapturing()){
+                capturingMoves.add(move);
+            }
+        }
+        
+        if(!capturingMoves.isEmpty()){
+            validMoves = capturingMoves;
+        }
     }
     
     //get valid moves for one piece.
