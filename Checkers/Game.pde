@@ -205,6 +205,10 @@ class Game{
         Piece movingPiece = board[move.from[0]][move.from[1]];
         changePiecePosition(movingPiece, move.from, move.to);
         
+        if(move.isCapturing()){
+            changePiecePosition(move.capturedPiece, activePieces.get(move.capturedPiece), null);
+        }
+        
         if(currentPlayerColor == COLOR.LIGHT) setPlayer(COLOR.DARK);
         else                                  setPlayer(COLOR.LIGHT);
         

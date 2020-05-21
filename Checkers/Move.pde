@@ -7,6 +7,10 @@ class Move{
         to = new int[]{ ti, tj };
     }
     
+    public boolean isCapturing(){
+        return (capturedPiece != null);
+    }
+    
     public void setCaptured(Piece cap){
         capturedPiece = cap;
     }
