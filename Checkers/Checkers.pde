@@ -12,7 +12,7 @@ void setup(){
 }
 
 void draw(){
-    background(50);
+    background(25);
     float cx = width/2, cy = height/2;
     boardSz = Math.min(width, height)*0.95;
     game.draw(cx, cy, boardSz, frontWhite);

@@ -13,8 +13,7 @@ class Game{
     //drawing variables
     float xlo, ylo, xhi, yhi;
     boolean whiteFront;
-    float cellWidth;
-    float cellHeight;
+    float cellSize;
     
     //IO variables
     Piece highlightedPiece;
@@ -37,14 +36,13 @@ class Game{
     }
     
     //draw function to be called with x, y bounds of drawing space and boolean of whether white is front.
-    public void draw(float centerX, float centerY, float boardSz, boolean whiteFront_){    //TODO check if square
+    public void draw(float centerX, float centerY, float boardSz, boolean whiteFront_){
         xlo = centerX - boardSz/2;
         xhi = centerX + boardSz/2;
         ylo = centerY - boardSz/2;
         yhi = centerY + boardSz/2;
         whiteFront = whiteFront_;
-        cellWidth = (xhi - xlo) /gridSz;
-        cellHeight = (yhi - ylo) /gridSz;
+        cellSize = boardSz / gridSz;
         
         drawBoard();
         drawPieces();
@@ -53,6 +51,12 @@ class Game{
     
     //draws board given bounding box
     private void drawBoard(){
+        rectMode(CORNERS);
+        fill(currentPlayerColor.drawColor);
+        noStroke();
+        float space = cellSize * 0.08;
+        rect(xlo - space, ylo - space, xhi + space, yhi + space);
+        
         
         rectMode(CENTER);
         noStroke();
@@ -63,8 +67,9 @@ class Game{
                 
                 float x = map(j+0.5, 0, gridSz, xlo, xhi);
                 float y = map(i+0.5, 0, gridSz, ylo, yhi);
-                rect(x, y, cellWidth, cellHeight);
+                rect(x, y, cellSize, cellSize);
             }
+        
         
     }
     
@@ -82,7 +87,7 @@ class Game{
                          y = ylo + yhi - y;
                      }
                      
-                     cellPiece.draw(x, y, cellWidth, cellHeight);     //TODO use same diameter
+                     cellPiece.draw(x, y, cellSize);     //TODO use same diameter
                 }
             }
     }
@@ -105,9 +110,10 @@ class Game{
             
             noFill();
             stroke(highlightColor);
+            strokeJoin(ROUND);
             strokeWeight(6);        //TODO make stroke weight varying
             rectMode(CENTER);
-            rect(x, y, cellWidth, cellHeight);
+            rect(x, y, cellSize, cellSize);
             
             
             /*if(move.capturedPiece != null){

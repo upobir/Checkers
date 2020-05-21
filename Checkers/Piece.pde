@@ -11,7 +11,7 @@ class Piece{
     
     //drawing variables
     float x, y;
-    float diamX, diamY;
+    float diam;
     
     
     Piece(COLOR pieceColor_, TYPE type_){
@@ -26,18 +26,17 @@ class Piece{
     }
     
     //to draw the pieces.
-    public void draw(float x_, float y_, float cellWidth, float cellHeight){
+    public void draw(float x_, float y_, float cellSize){
         ellipseMode(CENTER);
         stroke(0);
-        strokeWeight(2);
+        strokeWeight(2);            //TODO make strokeWeight varying
         x = x_;
         y = y_;
-        diamX = 0.75*cellWidth;        
-        diamY = 0.75*cellHeight;
+        diam = 0.75*cellSize;        
         /*if(pieceColor == COLOR.LIGHT)  fill(lightPieceColor);
         else                           fill(darkPieceColor);*/
         fill(pieceColor.drawColor);
-        ellipse(x, y, diamX, diamY);
+        ellipse(x, y, diam, diam);
         
         if(type == TYPE.KING){
             drawCrown();
@@ -62,14 +61,14 @@ class Piece{
         
         beginShape();
         //base of the crown
-        vertex(-diamX*bottomHalf, diamY*heightHalf);
-        vertex(diamX*bottomHalf, diamY*heightHalf);
+        vertex(-diam*bottomHalf, diam*heightHalf);
+        vertex(diam*bottomHalf, diam*heightHalf);
         
-        vertex(diamX*topHalf, -diamY*heightHalf);    //going up
-        vertex(diamX*crownMiddleHalf, 0);            //going down
-        vertex(0, -diamY*heightHalf);                //going up
-        vertex(-diamX*crownMiddleHalf, 0);           //going down
-        vertex(-diamX*topHalf, -diamY*heightHalf);   //going up
+        vertex(diam*topHalf, -diam*heightHalf);    //going up
+        vertex(diam*crownMiddleHalf, 0);            //going down
+        vertex(0, -diam*heightHalf);                //going up
+        vertex(-diam*crownMiddleHalf, 0);           //going down
+        vertex(-diam*topHalf, -diam*heightHalf);   //going up
         endShape(CLOSE);
         
         popMatrix();
@@ -80,8 +79,8 @@ class Piece{
         ellipseMode(CENTER);
         noFill();
         stroke(highlightColor);
-        strokeWeight(6);            //make stroke weight varying
-        ellipse(x, y, diamX, diamY);
+        strokeWeight(6);            //TODO make stroke weight varying
+        ellipse(x, y, diam, diam);
     }
     
     //get a list of legal moves considering other pieces.
