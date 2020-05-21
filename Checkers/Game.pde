@@ -173,7 +173,7 @@ class Game{
         }
     }
     
-    //get valid moves for one piece.
+    //get valid moves for one piece from precomputed validMoves
     private List<Move> getValidMovesFor(Piece piece){
         List<Move> ret = new LinkedList<Move>();
         for(Move move: validMoves){
@@ -201,13 +201,13 @@ class Game{
         
         Piece cellPiece = board[i][j];
         
-        if(cellPiece != null){
+        if(cellPiece != null){        //if the cell we clicked on, had a piece on it
             if(cellPiece == highlightedPiece)
                 highlightedPiece = null;
             else if(cellPiece.pieceColor == currentPlayerColor && !getValidMovesFor(cellPiece).isEmpty()) 
                 highlightedPiece = cellPiece;
         }
-        else{
+        else{                        //if the cell we clicked on, was empty
             if(highlightedPiece != null){
                 List<Move> interactableMoves = getValidMovesFor(highlightedPiece);
                 for(Move move: interactableMoves){
@@ -233,8 +233,19 @@ class Game{
             changePiecePosition(move.capturedPiece, activePieces.get(move.capturedPiece), null);
         }
         
-        if(currentPlayerColor == COLOR.LIGHT) setPlayer(COLOR.DARK);
-        else                                  setPlayer(COLOR.LIGHT);
+        validMoves.clear();
+        if(move.isCapturing()){
+            List<Move> moreMoves = movingPiece.getMoves(board, move.to[0], move.to[1]);
+            for(Move newMove: moreMoves){
+                if(newMove.isCapturing())
+                    validMoves.add(newMove);
+            }
+        }
+        
+        if(validMoves.isEmpty()){
+            if(currentPlayerColor == COLOR.LIGHT) setPlayer(COLOR.DARK);
+            else                                  setPlayer(COLOR.LIGHT);
+        }
         
         return true;
     }
