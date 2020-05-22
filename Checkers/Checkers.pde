@@ -1,5 +1,7 @@
 import java.util.*;
 
+//TODO comment all code
+
 Game game;
 float boardSz = 850; //board size for drawing
 boolean frontWhite = true;

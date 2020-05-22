@@ -27,9 +27,9 @@ class Game{
             for(int j = 0; j<gridSz; j++){            //Initializing dark pieces on row 0, 1, 2 & light pieces on row 5, 6, 7
                 if((i+j)%2 == 0) continue;
                 if(i < 3) 
-                    changePiecePosition(new Piece(COLOR.DARK, TYPE.SOLDIER), null, new int[]{i, j});
+                    changePiecePosition(new Piece(COLOR.DARK, TYPE.SOLDIER, gridSz-1), null, new int[]{i, j});
                 if(i >= gridSz-3) 
-                    changePiecePosition(new Piece(COLOR.LIGHT, TYPE.SOLDIER), null, new int[]{i, j});
+                    changePiecePosition(new Piece(COLOR.LIGHT, TYPE.SOLDIER, 0), null, new int[]{i, j});
             }    
         
         highlightedPiece = null;
@@ -233,8 +233,12 @@ class Game{
             changePiecePosition(move.capturedPiece, activePieces.get(move.capturedPiece), null);
         }
         
+        if(movingPiece.type == TYPE.SOLDIER && move.to[0] == movingPiece.kingingRow){
+            movingPiece.changeType(TYPE.KING);
+        }
+        
         validMoves.clear();
-        if(move.isCapturing()){
+        if(move.isCapturing()){            //check if multi-jump is possible, only when this move itself was jumping
             List<Move> moreMoves = movingPiece.getMoves(board, move.to[0], move.to[1]);
             for(Move newMove: moreMoves){
                 if(newMove.isCapturing())

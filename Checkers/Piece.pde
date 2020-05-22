@@ -8,21 +8,17 @@ class Piece{
     int[][] movementVector;
     COLOR pieceColor;
     TYPE type;
+    int kingingRow;
     
     //drawing variables
     float x, y;
     float diam;
     
     
-    Piece(COLOR pieceColor_, TYPE type_){
+    Piece(COLOR pieceColor_, TYPE type_, int kingingRow_){
         pieceColor = pieceColor_;
-        type = type_;
-        if(type == TYPE.KING)
-            movementVector = new int[][]{ {-1, 1}, {-1, -1}, {1, -1}, {1, 1} };
-        else if(pieceColor == COLOR.LIGHT) 
-            movementVector = new int[][]{ {-1, 1}, {-1, -1} };
-        else
-            movementVector = new int[][]{ {1, 1}, {1, -1} };
+        kingingRow = kingingRow_;
+        changeType(type_);
     }
     
     //to draw the pieces.
@@ -107,6 +103,18 @@ class Piece{
             }
         }
         return ret;
+    }
+    
+    
+    //updating to king
+    void changeType(TYPE newType){
+        type = newType;
+        if(type == TYPE.KING)
+            movementVector = new int[][]{ {-1, 1}, {-1, -1}, {1, -1}, {1, 1} };
+        else if(pieceColor == COLOR.LIGHT) 
+            movementVector = new int[][]{ {-1, 1}, {-1, -1} };
+        else
+            movementVector = new int[][]{ {1, 1}, {1, -1} };
     }
     
     //helper fucntion
