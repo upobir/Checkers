@@ -23,12 +23,15 @@ class Piece{
     
     //to draw the pieces.
     public void draw(float x_, float y_, float cellSize){
-        ellipseMode(CENTER);
-        stroke(0);
-        strokeWeight(2);            //TODO make strokeWeight varying
         x = x_;
         y = y_;
-        diam = 0.75*cellSize;        
+        diam = 0.75*cellSize;
+        
+        ellipseMode(CENTER);
+        stroke(0);
+        strokeWeight(diam*0.03);            //TODO make strokeWeight varying
+        //println(2.0/diam);
+                
         /*if(pieceColor == COLOR.LIGHT)  fill(lightPieceColor);
         else                           fill(darkPieceColor);*/
         fill(pieceColor.drawColor);
@@ -44,7 +47,7 @@ class Piece{
         pushMatrix();
         translate(x, y);
         stroke(0);
-        strokeWeight(2);
+        strokeWeight(diam * 0.025);
         fill(255, 255, 0);
         //if(side == COLOR.LIGHT)  fill(darkPieceColor);
         //else                     fill(lightPieceColor);
@@ -76,8 +79,9 @@ class Piece{
         noFill();
         stroke(highlightColor);
         //TODO make stroke weight varying
-        if(isPieceSelected)  strokeWeight(6);
-        else                 strokeWeight(4);
+        //println(4.0/diam);
+        if(isPieceSelected)  strokeWeight(diam * 0.075);
+        else                 strokeWeight(diam * 0.05);
         ellipse(x, y, diam, diam);
     }
     

@@ -95,7 +95,7 @@ class Game{
     }
     
     //drawing highlighted pieces and cells
-    private void drawHighlights(){
+    private void drawHighlights(){        //TODO highlight multijumps differently
         
         for(Move move : validMoves){
             board[move.from[0]][move.from[1]].highlight(availableMoveColor, false);
@@ -105,7 +105,7 @@ class Game{
         
         highlightedPiece.highlight(highlightColor, true);
 
-        List<Move> highlightMoves = getValidMovesFor(highlightedPiece);        
+        List<Move> highlightMoves = getValidMovesFor(highlightedPiece);
         for(Move move: highlightMoves){
             int i = move.to[0], j = move.to[1];
             float y = map(i+0.5, 0, gridSz, ylo, yhi);
@@ -115,10 +115,11 @@ class Game{
                 y = ylo + yhi - y;
             }
             
+            
             noFill();
             stroke(highlightColor);
             strokeJoin(ROUND);
-            strokeWeight(6);        //TODO make stroke weight varying
+            strokeWeight(cellSize*0.06);        //TODO make stroke weight varying
             rectMode(CENTER);
             rect(x, y, cellSize, cellSize);
             
