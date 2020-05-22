@@ -3,14 +3,16 @@ import java.util.*;
 //TODO comment all code
 
 Game game;
-float boardSz = 850; //board size for drawing
-boolean frontWhite = true;
+float boardSz; //board size for drawing
+boolean frontWhite;
+
+STATE state;
 
 void setup(){
     size(1200, 900);
     background(50);
-    game = new Game();
     surface.setResizable(true);
+    start(); 
 }
 
 void draw(){
@@ -31,4 +33,10 @@ void keyPressed(){
         frontWhite = !frontWhite;
     }
     else if(key == '\n') game.debugBoard();
+}
+
+void start(){
+    frontWhite = true;
+    game = new Game();
+    state = STATE.SETUP;
 }

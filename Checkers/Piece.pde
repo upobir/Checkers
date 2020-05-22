@@ -1,7 +1,3 @@
-enum TYPE{
-    SOLDIER, KING
-}
-
 class Piece{
     
     //piece game properties

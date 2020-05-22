@@ -10,3 +10,12 @@ public enum COLOR{
         this.drawColor = drawColor;
     }
 }
+
+
+public enum TYPE{
+    SOLDIER, KING
+}
+
+public enum STATE{
+    SETUP, PLAYING, FINISHED
+}
