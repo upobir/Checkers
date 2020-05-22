@@ -4,6 +4,7 @@ class Game{
     final color highlightColor = color(255, 255, 0);
     final color availableMoveColor = color(0, 0, 0);
     final int gridSz = 8;
+    final COLOR startingColor = COLOR.DARK;
     
     //game variables
     Piece board[][];
@@ -33,18 +34,19 @@ class Game{
             }    
         
         highlightedPiece = null;
-        setPlayer(COLOR.LIGHT);
+        
+        whiteFront = (startingColor == COLOR.LIGHT);
+        setPlayer(startingColor);
     }
     
     //draw function to be called with x, y bounds of drawing space and boolean of whether white is front.
-    public void draw(float centerX, float centerY, float boardSz, boolean whiteFront_){
+    public void draw(float centerX, float centerY, float boardSz){
         borderSpace = boardSz*0.011;
         float innerBoardSz = boardSz - borderSpace*2; 
         xlo = centerX - innerBoardSz/2;
         xhi = centerX + innerBoardSz/2;
         ylo = centerY - innerBoardSz/2;
         yhi = centerY + innerBoardSz/2;
-        whiteFront = whiteFront_;
         cellSize = innerBoardSz / gridSz;
         
         drawBoard();
@@ -122,26 +124,12 @@ class Game{
             strokeWeight(cellSize*0.06);        //TODO make stroke weight varying
             rectMode(CENTER);
             rect(x, y, cellSize, cellSize);
-            
-            
-            /*if(move.capturedPiece != null){
-                int capi = (move.to[0] + move.from[0])/2;
-                int capj = (move.to[1] + move.from[1])/2;
-                float capy = map(capi+0.5, 0, gridSz, ylo, yhi);
-                float capx = map(capj+0.5, 0, gridSz, xlo, xhi);
-                if(!whiteFront){
-                    x = xlo + xhi - x;
-                    y = ylo + yhi - y;
-                }
-                
-                noFill();
-                stroke(0);
-                strokeWeight(6);
-                rectMode(CENTER);
-                rect(capx, capy, cellWidth, cellHeight);
-            }*/
-        }
-        
+        }        
+    }
+    
+    public void flipView(){
+        whiteFront = !whiteFront;
+        return;
     }
     
     //setiing current playing side.

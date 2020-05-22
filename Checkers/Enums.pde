@@ -9,6 +9,12 @@ public enum COLOR{
     private COLOR(color drawColor){
         this.drawColor = drawColor;
     }
+    
+    public COLOR opposite(){
+        if(this == LIGHT) return DARK;
+        else              return LIGHT;
+    }
+  
 }
 
 

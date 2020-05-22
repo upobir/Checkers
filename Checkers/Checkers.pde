@@ -4,8 +4,6 @@ import java.util.*;
 
 Game game;
 float boardSz; //board size for drawing
-boolean frontWhite;
-
 STATE state;
 
 void setup(){
@@ -19,24 +17,23 @@ void draw(){
     background(25);
     float cx = width/2, cy = height/2;
     boardSz = Math.min(width, height)*0.95;
-    game.draw(cx, cy, boardSz, frontWhite);
+    game.draw(cx, cy, boardSz);
 }
 
 void mousePressed(){
     if(mouseButton == LEFT){
         game.interactMouse(mouseX, mouseY);
     }
+    else if(mouseButton == RIGHT){
+        game.flipView();
+    }
 }
 
 void keyPressed(){
-    if(key == ' '){
-        frontWhite = !frontWhite;
-    }
-    else if(key == '\n') game.debugBoard();
+    if(key == '\n') game.debugBoard();
 }
 
 void start(){
-    frontWhite = true;
     game = new Game();
     state = STATE.SETUP;
 }

@@ -25,11 +25,8 @@ class Piece{
         
         ellipseMode(CENTER);
         stroke(0);
-        strokeWeight(diam*0.03);            //TODO make strokeWeight varying
-        //println(2.0/diam);
-                
-        /*if(pieceColor == COLOR.LIGHT)  fill(lightPieceColor);
-        else                           fill(darkPieceColor);*/
+        strokeWeight(diam*0.026);            //TODO make strokeWeight varying
+
         fill(pieceColor.drawColor);
         ellipse(x, y, diam, diam);
         
@@ -43,11 +40,8 @@ class Piece{
         pushMatrix();
         translate(x, y);
         stroke(0);
-        strokeWeight(diam * 0.025);
+        strokeWeight(diam * 0.026);
         fill(255, 255, 0);
-        //if(side == COLOR.LIGHT)  fill(darkPieceColor);
-        //else                     fill(lightPieceColor);
-        //noFill();
         
         float bottomHalf = 0.22;
         float topHalf = 0.28;
@@ -59,11 +53,11 @@ class Piece{
         vertex(-diam*bottomHalf, diam*heightHalf);
         vertex(diam*bottomHalf, diam*heightHalf);
         
-        vertex(diam*topHalf, -diam*heightHalf);    //going up
+        vertex(diam*topHalf, -diam*heightHalf);     //going up
         vertex(diam*crownMiddleHalf, 0);            //going down
         vertex(0, -diam*heightHalf);                //going up
         vertex(-diam*crownMiddleHalf, 0);           //going down
-        vertex(-diam*topHalf, -diam*heightHalf);   //going up
+        vertex(-diam*topHalf, -diam*heightHalf);    //going up
         endShape(CLOSE);
         
         popMatrix();
@@ -74,10 +68,8 @@ class Piece{
         ellipseMode(CENTER);
         noFill();
         stroke(highlightColor);
-        //TODO make stroke weight varying
-        //println(4.0/diam);
-        if(isPieceSelected)  strokeWeight(diam * 0.075);
-        else                 strokeWeight(diam * 0.05);
+        if(isPieceSelected)  strokeWeight(diam * 0.077);
+        else                 strokeWeight(diam * 0.052);
         ellipse(x, y, diam, diam);
     }
     
