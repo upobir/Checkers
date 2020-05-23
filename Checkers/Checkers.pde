@@ -55,6 +55,7 @@ void mousePressed(){
 
 void keyPressed(){
     if(key == '\n') game.debugBoard();
+    else if(key == '\b' && game.lastMove != null) game.undoMove(game.lastMove, game.lastColor,true);        // DEBUG code
 }
 
 

@@ -2,6 +2,7 @@ class Game{
     final color lightCellColor = color(255, 238, 187);
     final color darkCellColor = color(85, 136, 34);
     final color highlightColor = color(255, 255, 0);
+    final color multijumpHighlightColor = color(255, 69, 0);
     final color availableMoveColor = color(0, 0, 0);
     final int gridSz = 8;
     final COLOR startingColor = COLOR.DARK;
@@ -20,6 +21,14 @@ class Game{
     
     //IO variables
     Piece highlightedPiece;
+    
+    
+    // DEBUG code
+    Move lastMove;
+    COLOR lastColor;
+    
+    
+    
     
     Game(){
         board = new Piece[8][8];
@@ -121,7 +130,8 @@ class Game{
             
             
             noFill();
-            stroke(highlightColor);
+            if(!futureJumpPossible(move)) stroke(highlightColor);
+            else                          stroke(multijumpHighlightColor);
             strokeJoin(ROUND);
             strokeWeight(cellSize*0.06);        //TODO make stroke weight varying
             rectMode(CENTER);
@@ -129,6 +139,22 @@ class Game{
         }        
     }
     
+    private boolean futureJumpPossible(Move move){
+        if(!move.isCapturing()) return false;
+        
+        
+        
+        /*List<Move> futureMoveList = movingPiece.getMoves(virtualBoard, newP[0], newP[1]);
+        for(Move futureMove: futureMoveList){
+            if(futureMove.isCapturing())
+                return true;
+        }*/
+        
+        return false;
+    }
+    
+    
+    //public function to reverse view
     public void flipView(){
         whiteFront = !whiteFront;
         return;
@@ -233,6 +259,7 @@ class Game{
         
         if(movingPiece.type == TYPE.SOLDIER && move.to[0] == movingPiece.kingingRow){
             movingPiece.changeType(TYPE.KING);
+            move.isKingingMove = true;
         }
         
         validMoves.clear();
@@ -249,7 +276,38 @@ class Game{
             else                                  setPlayer(COLOR.LIGHT);
         }
         
+        
+        // DEBUG code
+        lastMove = move;
+        lastColor = movingPiece.pieceColor;
+        
         return true;
+    }
+    
+    public void undoMove(Move move, COLOR prvPlayerColor, boolean hardUndo){
+        if(winningColor != null) winningColor = null;
+        Piece movingPiece = board[move.to[0]][move.to[1]];
+        
+        if(move.isKingingMove) movingPiece.changeType(TYPE.SOLDIER);
+        
+        changePiecePosition(movingPiece, move.to, move.from);
+        
+        if(move.isCapturing()){
+            int[] capP = new int[]{(move.from[0] + move.to[0])/2, (move.from[1] + move.to[1])/2};
+            changePiecePosition(move.capturedPiece, null, capP);
+        }
+        
+        if(hardUndo){
+            setPlayer(prvPlayerColor);
+        }
+        else{
+            currentPlayerColor = prvPlayerColor;
+        }
+        
+        // DEBUG code
+        lastMove = null;
+        lastColor = null;
+        return;
     }
     
     //chaging piece position by inserting it, deleting it or just changing it.
@@ -273,6 +331,7 @@ class Game{
     }
     
     
+    // DEBUG code
     //debugging the board
     public void debugBoard(){
         for(int i = 0; i<gridSz; i++){
