@@ -11,6 +11,7 @@ class Game{
     Map<Piece, int[]> activePieces;        //TODO maybe set this to different maps for different colors?
     COLOR currentPlayerColor;
     ArrayList<Move> validMoves;
+    COLOR winningColor;
     
     //drawing variables
     float xlo, ylo, xhi, yhi;
@@ -34,6 +35,7 @@ class Game{
             }    
         
         highlightedPiece = null;
+        winningColor = null;
         
         whiteFront = (startingColor == COLOR.LIGHT);
         setPlayer(startingColor);
@@ -134,13 +136,17 @@ class Game{
     
     //setiing current playing side.
     private void setPlayer(COLOR side){
+        if(winningColor != null) return;
         currentPlayerColor = side;
         computeValidMoves();
-        if(validMoves.isEmpty()) println("no more moves possible");
+        if(validMoves.isEmpty()){
+            winningColor = currentPlayerColor.opposite();
+        }
     }
     
     //computing valid moves for current player.
     private void computeValidMoves(){
+        if(winningColor != null) return;
         validMoves.clear();
         for(Map.Entry<Piece, int[]> entry: activePieces.entrySet()){
             if(entry.getKey().pieceColor != currentPlayerColor) continue;
@@ -164,6 +170,7 @@ class Game{
     
     //get valid moves for one piece from precomputed validMoves
     private List<Move> getValidMovesFor(Piece piece){
+        if(winningColor != null) return null;
         List<Move> ret = new LinkedList<Move>();
         for(Move move: validMoves){
             int[] pos = move.from;
@@ -175,6 +182,7 @@ class Game{
     
     //interact with mouse press
     public void interactMouse(float mx, float my){
+        if(winningColor != null) return;
         if(mx != constrain(mx, xlo, xhi) || my != constrain(my, ylo, yhi)) return;
         if(!whiteFront){
             mx = xlo + xhi - mx;
@@ -212,6 +220,7 @@ class Game{
     
     //applying a move
     public boolean applyMove(Move move){
+        if(winningColor != null) return false;
         //TODO check if move is valid, inefficient?
         if(!validMoves.contains(move)) return false;
         
@@ -245,6 +254,7 @@ class Game{
     
     //chaging piece position by inserting it, deleting it or just changing it.
     private void changePiecePosition(Piece piece, int[] from, int to[]){
+        if(winningColor != null) return;
         //TODO remove these asserts before finishing
         assert from != null || to != null;
         if(from != null) assert board[from[0]][from[1]] == piece;
