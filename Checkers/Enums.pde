@@ -10,6 +10,11 @@ public enum COLOR{
         this.drawColor = drawColor;
     }
     
+    public String toString(){
+        if(this == LIGHT) return "White";
+        else              return "Red";
+    }
+    
     public COLOR opposite(){
         if(this == LIGHT) return DARK;
         else              return LIGHT;
@@ -23,5 +28,5 @@ public enum TYPE{
 }
 
 public enum STATE{
-    SETUP, PLAYING, FINISHED
+    PLAYING, FINISHED
 }

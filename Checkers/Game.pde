@@ -22,13 +22,9 @@ class Game{
     //IO variables
     Piece highlightedPiece;
     
-    
     // DEBUG code
     Move lastMove;
     COLOR lastColor;
-    
-    
-    
     
     Game(){
         board = new Piece[8][8];

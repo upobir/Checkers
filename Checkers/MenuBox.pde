@@ -19,9 +19,10 @@ class MenuBox{
         
     }
     
-    public void set(int i, int j, TextBox textBox){
+    public void set(int i, int j, String string){
         try{
-            boxes[i][j] = textBox;
+            boxes[i][j] = new TextBox(string);
+            
         } catch (ArrayIndexOutOfBoundsException e){
             e.printStackTrace();
         }
@@ -39,11 +40,11 @@ class MenuBox{
         rect(xlo, ylo, xhi, yhi);
         
         // perhaps set the borders in a better way?
-        float scaleSpace = 0.95;
-        float boxHeight = (yhi-ylo)/boxes.length * scaleSpace;
+        float borderSpace = Math.min(menuWidth, menuHeight) * 0.03;
+        float boxHeight = (yhi-ylo)/boxes.length - borderSpace * 2;
         for(int i = 0; i<boxes.length; i++){
             float boxCY = map(i+0.5, 0, boxes.length, ylo, yhi);
-            float boxWidth = (xhi-xlo)/boxes[i].length * scaleSpace;
+            float boxWidth = (xhi-xlo)/boxes[i].length - borderSpace * 2;
             for(int j = 0; j<boxes[i].length; j++){
                 if(boxes[i][j] == null) continue;
                 float boxCX = map(j+0.5, 0, boxes[i].length, xlo, xhi);

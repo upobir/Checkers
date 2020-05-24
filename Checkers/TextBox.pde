@@ -1,7 +1,9 @@
 class TextBox{
     float xlo, ylo, xhi, yhi; 
+    String showText;
    
-    TextBox(){
+    TextBox(String showText){
+        this.showText = showText;
     }
     
     public void draw(float cx, float cy, float boxWidth, float boxHeight){
@@ -14,11 +16,11 @@ class TextBox{
         fill(255);
         textSize(32);
         textAlign(CENTER, CENTER);
-        text("WON", cx, cy);
+        text(showText, cx, cy);
         
         noFill();
         stroke(0);
-        strokeWeight(1);
+        strokeWeight(Math.min(boxWidth, boxHeight)*0.02);
         rect(xlo, ylo, xhi, yhi);
     }
 }
