@@ -17,8 +17,15 @@ void setup(){
     size(1200, 900);
     background(50);
     surface.setResizable(true);
-    menuBox = new MenuBox();
+    menuBox = new MenuBox(3, 1, 1);
+    menuBox.set(0, 0, new TextBox());
+    menuBox.set(1, 0, new TextBox());
+    menuBox.set(2, 0, new TextBox());
+    
     gameStart(); 
+    
+    // DEBUG code
+    // game.winningColor = COLOR.LIGHT;
 }
 
 void gameStart(){
