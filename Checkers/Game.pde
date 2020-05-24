@@ -2,7 +2,7 @@ class Game{
     final color lightCellColor = color(255, 238, 187);
     final color darkCellColor = color(85, 136, 34);
     final color highlightColor = color(255, 255, 0);
-    final color multijumpHighlightColor = color(255, 69, 0);
+    final color multijumpHighlightColor = color(248, 150, 0);
     final color availableMoveColor = color(0, 0, 0);
     final int gridSz = 8;
     final COLOR startingColor = COLOR.DARK;
@@ -142,13 +142,24 @@ class Game{
     private boolean futureJumpPossible(Move move){
         if(!move.isCapturing()) return false;
         
+        Piece[][] virtualBoard = new Piece[gridSz][];
+        for(int i = 0; i<gridSz; i++)
+            virtualBoard[i] = board[i].clone();
+            
+        int[] oldP = move.from;
+        int[] newP = move.to;
+        int[] capP = new int[]{ (oldP[0] + newP[0])/2, (oldP[1] + newP[1])/2 };
         
+        Piece movingPiece = virtualBoard[oldP[0]][oldP[1]];
+        virtualBoard[oldP[0]][oldP[1]] = null;
+        virtualBoard[newP[0]][newP[1]] = movingPiece;
+        virtualBoard[capP[0]][capP[1]] = null;
         
-        /*List<Move> futureMoveList = movingPiece.getMoves(virtualBoard, newP[0], newP[1]);
+        List<Move> futureMoveList = movingPiece.getMoves(virtualBoard, newP[0], newP[1]);
         for(Move futureMove: futureMoveList){
             if(futureMove.isCapturing())
                 return true;
-        }*/
+        }
         
         return false;
     }
