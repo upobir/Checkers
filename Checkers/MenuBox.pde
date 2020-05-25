@@ -6,28 +6,26 @@ class MenuBox{
     
     final color bodyColor = color(163, 74, 180);
     float xlo, ylo, xhi, yhi;
+    boolean isActive;
     
     // maybe for more functionality the lists could be dynamic, but for my purposes static is okay
     TextBox [][] boxes;
-    boolean interactable;
     
-    MenuBox(int ... rowsDesc){
+    MenuBox(boolean isActive , int ... rowsDesc){
         boxes = new TextBox[rowsDesc.length][];
         for(int i = 0; i<rowsDesc.length; i++)
             boxes[i] = new TextBox[rowsDesc[i]];
-        interactable = true;
+        //interactable = true;
+        this.isActive = isActive;
     }
     
+    //setting string to textBox at [i][j] with type
     public void set(int i, int j, String string, BOXTYPE type){
         try{
             boxes[i][j] = new TextBox(string, type);
         } catch (ArrayIndexOutOfBoundsException e){
             e.printStackTrace();
         }
-    }
-    
-    public void setInteractibility(boolean interactable){
-        this.interactable = interactable;
     }
     
     //drawing function given center coordinate and full width and indiv. row height
@@ -57,8 +55,9 @@ class MenuBox{
         }
     }
     
+    //interact with mouse
     public int[] interactMouse(float mx, float my){
-        if(!interactable) return null;
+        //if(!interactable) return null;
         if(mx != constrain(mx, xlo, xhi) || my != constrain(my, ylo, yhi)) return null;
         for(int i = 0; i<boxes.length; i++){
             for(int j = 0; j<boxes[i].length; j++){

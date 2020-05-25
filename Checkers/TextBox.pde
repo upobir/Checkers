@@ -8,7 +8,6 @@ class TextBox{
     
     // logical variables;
     BOXTYPE type;
-    //boolean isActivated;
     
    
     TextBox(String showText, BOXTYPE type){
