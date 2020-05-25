@@ -4,29 +4,30 @@ class MenuBox{
     
     //TODO change font add textBoxes
     
-    //final color bodyColor = color(132, 54, 161);
     final color bodyColor = color(163, 74, 180);
-    //final color activatedColor = color(222, 112, 236);
-    final color activatedColor = color(132, 54, 161);
-    
     float xlo, ylo, xhi, yhi;
     
     // maybe for more functionality the lists could be dynamic, but for my purposes static is okay
     TextBox [][] boxes;
+    boolean interactable;
     
     MenuBox(int ... rowsDesc){
         boxes = new TextBox[rowsDesc.length][];
         for(int i = 0; i<rowsDesc.length; i++)
             boxes[i] = new TextBox[rowsDesc[i]];
-        
+        interactable = true;
     }
     
     public void set(int i, int j, String string, BOXTYPE type){
         try{
-            boxes[i][j] = new TextBox(string, type, activatedColor);
+            boxes[i][j] = new TextBox(string, type);
         } catch (ArrayIndexOutOfBoundsException e){
             e.printStackTrace();
         }
+    }
+    
+    public void setInteractibility(boolean interactable){
+        this.interactable = interactable;
     }
     
     //drawing function given center coordinate and full width and indiv. row height
@@ -57,6 +58,7 @@ class MenuBox{
     }
     
     public int[] interactMouse(float mx, float my){
+        if(!interactable) return null;
         if(mx != constrain(mx, xlo, xhi) || my != constrain(my, ylo, yhi)) return null;
         for(int i = 0; i<boxes.length; i++){
             for(int j = 0; j<boxes[i].length; j++){

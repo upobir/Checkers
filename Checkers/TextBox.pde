@@ -1,15 +1,20 @@
 class TextBox{
+    // drawing variables
     float xlo, ylo, xhi, yhi; 
+    int timer;
     String showText;
+    final color buttonColor = color(132, 54, 161);
+    final color activatedColor = color(106, 18, 146);
+    
+    // logical variables;
     BOXTYPE type;
     //boolean isActivated;
-    color activatedColor;
+    
    
-    TextBox(String showText, BOXTYPE type, color activatedColor){
+    TextBox(String showText, BOXTYPE type){
         this.showText = showText;
         this.type = type;
         //isActivated = false;
-        this.activatedColor = activatedColor;
     }
     
     //draw text box
@@ -21,9 +26,9 @@ class TextBox{
         
         
         if(type == BOXTYPE.BUTTON){
-            //if(!isActivated) noFill();
-            //else             fill(activatedColor);
-            fill(activatedColor);
+            
+            if(timer == 0) fill(buttonColor);
+            else           fill(activatedColor);
             stroke(0);
             strokeWeight(Math.min(boxWidth, boxHeight)*0.02);
             rectMode(CORNERS);
@@ -34,9 +39,15 @@ class TextBox{
         textSize(32);
         textAlign(CENTER, CENTER);
         text(showText, cx, cy);
+        
+        if(timer > 0) timer--;
     }
     
     public boolean clickedOn(float mx, float my){
-        return (mx == constrain(mx, xlo, xhi) && my == constrain(my, ylo, yhi));
+        boolean res =  (mx == constrain(mx, xlo, xhi) && my == constrain(my, ylo, yhi));
+        if(res){
+            timer = animationUnit;
+        }
+        return res;
     }
 }

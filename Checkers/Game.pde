@@ -214,9 +214,9 @@ class Game{
     }
     
     //interact with mouse press
-    public void interactMouse(float mx, float my){
-        if(winningColor != null) return;
-        if(mx != constrain(mx, xlo, xhi) || my != constrain(my, ylo, yhi)) return;
+    public boolean interactMouse(float mx, float my){
+        if(winningColor != null) return false;
+        if(mx != constrain(mx, xlo, xhi) || my != constrain(my, ylo, yhi)) return false;
         if(!whiteFront){
             mx = xlo + xhi - mx;
             my = ylo + yhi - my;
@@ -232,10 +232,14 @@ class Game{
         Piece cellPiece = board[i][j];
         
         if(cellPiece != null){        //if the cell we clicked on, had a piece on it
-            if(cellPiece == highlightedPiece)
+            if(cellPiece == highlightedPiece){
                 highlightedPiece = null;
-            else if(cellPiece.pieceColor == currentPlayerColor && !getValidMovesFor(cellPiece).isEmpty()) 
+                return true;
+            }
+            else if(cellPiece.pieceColor == currentPlayerColor && !getValidMovesFor(cellPiece).isEmpty()){ 
                 highlightedPiece = cellPiece;
+                return true;
+            }
         }
         else{                        //if the cell we clicked on, was empty
             if(highlightedPiece != null){
@@ -244,10 +248,12 @@ class Game{
                     if(move.to[0] == i && move.to[1] == j){
                         applyMove(move);
                         highlightedPiece = null;
+                        return true;
                     }
                 }
             }
         }
+        return false;
     }
     
     
