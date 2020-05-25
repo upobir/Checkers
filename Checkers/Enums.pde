@@ -28,7 +28,7 @@ public enum TYPE{
 }
 
 public enum STATE{
-    PLAYING, FINISHED
+    SETUP, PLAYING, FINISHED
 }
 
 public enum BOXTYPE{

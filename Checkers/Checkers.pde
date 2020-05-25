@@ -23,7 +23,7 @@ void setup(){
     size(1200, 900);
     background(50);
     surface.setResizable(true);
-    changeState(STATE.PLAYING, 0);
+    changeState(STATE.SETUP, 0);
 }
 
 void changeState(STATE newState, int timer){
@@ -33,9 +33,16 @@ void changeState(STATE newState, int timer){
 
 void updateState(){
     if(nxtState == null) return;
-    if(nxtState == STATE.PLAYING){
-        game = new Game();
-        menuBox = null;
+    
+    if(nxtState == STATE.SETUP){
+        game =  new Game();    
+        menuBox = new MenuBox(true, 1, 1, 1, 3);
+        menuBox.set(0, 0, "Choose Mode", BOXTYPE.TEXTONLY);
+        menuBox.set(3, 1, "Start Game", BOXTYPE.BUTTON);
+    }
+    else if(nxtState == STATE.PLAYING){
+        menuBox = new MenuBox(false, 0, 3, 0);
+        menuBox.set(1, 1, "Start New Game", BOXTYPE.BUTTON);
     }
     else if(nxtState == STATE.FINISHED){
         menuBox = new MenuBox(true, 0, 1, 0, 3);
@@ -75,20 +82,33 @@ void mousePressed(){
         game.flipView();
         return;
     }
-    
-    if(curState == STATE.PLAYING){   
+    if(curState == STATE.SETUP){
+        if(menuBox != null && menuBox.isActive){
+            int[] clicked = menuBox.interactMouse(mouseX, mouseY);
+            if(Arrays.equals(clicked, new int[]{3, 1})){
+                changeState(STATE.PLAYING, 2*animationUnit);
+            }
+        }
+    }
+    else if(curState == STATE.PLAYING){   
         if(menuBox == null || !menuBox.isActive){
             boolean interaction = game.interactMouse(mouseX, mouseY);
              if(interaction && game.winningColor != null){
                  changeState(STATE.FINISHED, animationUnit*4);
              }
         }
+        else if(menuBox != null && menuBox.isActive){
+            int[] clicked = menuBox.interactMouse(mouseX, mouseY);
+            if(Arrays.equals(clicked, new int[]{1, 1})){
+                changeState(STATE.SETUP, 2*animationUnit);
+            }
+        }
     }
     else if(curState == STATE.FINISHED){
         if(menuBox != null && menuBox.isActive){
             int[] clicked = menuBox.interactMouse(mouseX, mouseY);
-            if(clicked != null && Arrays.equals(clicked, new int[]{3, 1})){
-                changeState(STATE.PLAYING, 2*animationUnit);
+            if(Arrays.equals(clicked, new int[]{3, 1})){
+                changeState(STATE.SETUP, 2*animationUnit);
             }
         }
     }
