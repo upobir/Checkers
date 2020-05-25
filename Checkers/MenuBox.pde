@@ -29,6 +29,7 @@ class MenuBox{
         }
     }
     
+    //drawing function given center coordinate and full width and indiv. row height
     public void draw(float cx, float cy, float menuWidth, float menuRowHeight){
         float menuHeight = menuRowHeight * boxes.length;
         xlo = cx - menuWidth/2;
@@ -53,5 +54,19 @@ class MenuBox{
                 boxes[i][j].draw(boxCX, boxCY, boxWidth, boxHeight);
             }
         }
+    }
+    
+    public int[] interactMouse(float mx, float my){
+        if(mx != constrain(mx, xlo, xhi) || my != constrain(my, ylo, yhi)) return null;
+        for(int i = 0; i<boxes.length; i++){
+            for(int j = 0; j<boxes[i].length; j++){
+                TextBox box = boxes[i][j];
+                if(box == null || box.type != BOXTYPE.BUTTON) continue;
+                if(box.clickedOn(mx, my)){
+                    return new int[]{i, j};
+                }
+            }
+        }
+        return null;
     }
 }

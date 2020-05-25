@@ -24,16 +24,12 @@ void changeState(STATE newState){
     if(newState == STATE.PLAYING){
         game = new Game();
         menuBox = null;
-        
-        // DEBUG code
-         game.winningColor = COLOR.DARK;
-         changeState(STATE.FINISHED);
     }
     else if(newState == STATE.FINISHED){
-        menuBox = new MenuBox(0, 1, 0, 1);
+        menuBox = new MenuBox(0, 1, 0, 3);
         String winningText = game.winningColor.toString() + " won!";
         menuBox.set(1, 0, winningText, BOXTYPE.TEXTONLY);
-        menuBox.set(3, 0, "Start New Game", BOXTYPE.BUTTON);
+        menuBox.set(3, 1, "Start New Game", BOXTYPE.BUTTON);
     }
     curState = newState;
 }
@@ -59,22 +55,37 @@ void draw(){
 
 
 void mousePressed(){
-    if(curState == STATE.PLAYING){
-        if(mouseButton == LEFT){
-            game.interactMouse(mouseX, mouseY);
-            if(game.winningColor != null){
-                changeState(STATE.FINISHED);
-            }
-        }
-    }
     if(mouseButton == RIGHT){
         game.flipView();
+        return;
     }
+    
+    if(curState == STATE.PLAYING){        
+         game.interactMouse(mouseX, mouseY);
+         if(game.winningColor != null){
+             changeState(STATE.FINISHED);
+         }
+    }
+    else if(curState == STATE.FINISHED){
+        int[] clicked = menuBox.interactMouse(mouseX, mouseY);
+        /*if(clicked != null){
+            println(clicked[0], clicked[1]);
+            println(clicked.equals(new int[]{3, 0}));
+        }*/
+        if(clicked != null && Arrays.equals(clicked, new int[]{3, 1}))
+            changeState(STATE.PLAYING);
+    }
+    
 }
 
 void keyPressed(){
     if(key == '\n') game.debugBoard();
     else if(key == '\b' && game.lastMove != null) game.undoMove(game.lastMove, game.lastColor,true);        // DEBUG code
+    else if(key == 'l'){ 
+        // DEBUG code
+        game.winningColor = COLOR.LIGHT;
+        changeState(STATE.FINISHED);
+    }
 }
 
 

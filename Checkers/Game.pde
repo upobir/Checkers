@@ -270,7 +270,7 @@ class Game{
         }
         
         validMoves.clear();
-        if(move.isCapturing()){            //check if multi-jump is possible, only when this move itself was jumping
+        if(move.isCapturing() && !move.isKingingMove){            //check if multi-jump is possible, only when this move itself was jumping and piece was not kinged this move
             List<Move> moreMoves = movingPiece.getMoves(board, move.to[0], move.to[1]);
             for(Move newMove: moreMoves){
                 if(newMove.isCapturing())

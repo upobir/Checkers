@@ -2,16 +2,17 @@ class TextBox{
     float xlo, ylo, xhi, yhi; 
     String showText;
     BOXTYPE type;
-    boolean isActivated;
+    //boolean isActivated;
     color activatedColor;
    
     TextBox(String showText, BOXTYPE type, color activatedColor){
         this.showText = showText;
         this.type = type;
-        isActivated = false;
+        //isActivated = false;
         this.activatedColor = activatedColor;
     }
     
+    //draw text box
     public void draw(float cx, float cy, float boxWidth, float boxHeight){
         xlo = cx - boxWidth/2;
         ylo = cy - boxHeight/2;
@@ -20,8 +21,9 @@ class TextBox{
         
         
         if(type == BOXTYPE.BUTTON){
-            if(!isActivated) noFill();
-            else             fill(activatedColor);
+            //if(!isActivated) noFill();
+            //else             fill(activatedColor);
+            fill(activatedColor);
             stroke(0);
             strokeWeight(Math.min(boxWidth, boxHeight)*0.02);
             rectMode(CORNERS);
@@ -32,6 +34,9 @@ class TextBox{
         textSize(32);
         textAlign(CENTER, CENTER);
         text(showText, cx, cy);
-        
+    }
+    
+    public boolean clickedOn(float mx, float my){
+        return (mx == constrain(mx, xlo, xhi) && my == constrain(my, ylo, yhi));
     }
 }
