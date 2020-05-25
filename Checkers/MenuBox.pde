@@ -6,6 +6,8 @@ class MenuBox{
     
     //final color bodyColor = color(132, 54, 161);
     final color bodyColor = color(163, 74, 180);
+    //final color activatedColor = color(222, 112, 236);
+    final color activatedColor = color(132, 54, 161);
     
     float xlo, ylo, xhi, yhi;
     
@@ -19,16 +21,16 @@ class MenuBox{
         
     }
     
-    public void set(int i, int j, String string){
+    public void set(int i, int j, String string, BOXTYPE type){
         try{
-            boxes[i][j] = new TextBox(string);
-            
+            boxes[i][j] = new TextBox(string, type, activatedColor);
         } catch (ArrayIndexOutOfBoundsException e){
             e.printStackTrace();
         }
     }
     
-    public void draw(float cx, float cy, float menuWidth, float menuHeight){
+    public void draw(float cx, float cy, float menuWidth, float menuRowHeight){
+        float menuHeight = menuRowHeight * boxes.length;
         xlo = cx - menuWidth/2;
         xhi = cx + menuWidth/2;
         ylo = cy - menuHeight/2;

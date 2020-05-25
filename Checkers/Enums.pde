@@ -30,3 +30,7 @@ public enum TYPE{
 public enum STATE{
     PLAYING, FINISHED
 }
+
+public enum BOXTYPE{
+    TEXTONLY, BUTTON
+}

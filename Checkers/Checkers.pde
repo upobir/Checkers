@@ -26,13 +26,14 @@ void changeState(STATE newState){
         menuBox = null;
         
         // DEBUG code
-        // game.winningColor = COLOR.DARK;
-        // changeState(STATE.FINISHED);
+         game.winningColor = COLOR.DARK;
+         changeState(STATE.FINISHED);
     }
     else if(newState == STATE.FINISHED){
-        menuBox = new MenuBox(1);
+        menuBox = new MenuBox(0, 1, 0, 1);
         String winningText = game.winningColor.toString() + " won!";
-        menuBox.set(0, 0, winningText);
+        menuBox.set(1, 0, winningText, BOXTYPE.TEXTONLY);
+        menuBox.set(3, 0, "Start New Game", BOXTYPE.BUTTON);
     }
     curState = newState;
 }
@@ -50,8 +51,8 @@ void draw(){
     if(menuBox != null){
         cx = width/2;
         cy = height/2;
-        float menuWidth = boardSz*20.0/19.0, menuHeight = boardSz/2*0.8;
-        menuBox.draw(cx, cy, menuWidth, menuHeight);
+        float menuWidth = boardSz*20.0/19.0, menuRowHeight = boardSz/2*0.2;
+        menuBox.draw(cx, cy, menuWidth, menuRowHeight);
     }
 }
 
