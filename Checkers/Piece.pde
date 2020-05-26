@@ -17,6 +17,13 @@ class Piece{
         changeType(type_);
     }
     
+    //return a logical copy of the piece
+    public Piece copy(){
+        Piece clone = new Piece(pieceColor, type, kingingRow);
+        clone.movementVector = movementVector.clone();
+        return clone;
+    }
+    
     //to draw the pieces.
     public void draw(float x_, float y_, float cellSize){
         x = x_;

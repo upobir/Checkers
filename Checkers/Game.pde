@@ -1,12 +1,13 @@
+//would have set these as static if processing'd let me -_-
+final color lightCellColor = color(255, 238, 187);
+final color darkCellColor = color(85, 136, 34);
+final color highlightColor = color(255, 255, 0);
+final color multijumpHighlightColor = color(248, 150, 0);
+final color availableMoveColor = color(0, 0, 0);
+final int gridSz = 8;
+final COLOR startingColor = COLOR.DARK;
+
 class Game{
-    final color lightCellColor = color(255, 238, 187);
-    final color darkCellColor = color(85, 136, 34);
-    final color highlightColor = color(255, 255, 0);
-    final color multijumpHighlightColor = color(248, 150, 0);
-    final color availableMoveColor = color(0, 0, 0);
-    final int gridSz = 8;
-    final COLOR startingColor = COLOR.DARK;
-    
     //game variables
     Piece board[][];
     Map<Piece, int[]> activePieces;        //TODO maybe set this to different maps for different colors?
@@ -27,7 +28,7 @@ class Game{
     COLOR lastColor;
     
     Game(){
-        board = new Piece[8][8];
+        board = new Piece[gridSz][gridSz];
         activePieces = new HashMap<Piece, int[]>();
         validMoves = new ArrayList<Move>();
         for(int i = 0; i<gridSz; i++)
@@ -44,6 +45,27 @@ class Game{
         
         whiteFront = (startingColor == COLOR.LIGHT);
         setPlayer(startingColor);
+    }
+    
+    //return a logical copy of the game
+    //Will this work in midway multi jumps?
+    public Game copy(){
+        Game clone = new Game();
+        //cloning board
+        clone.board = new Piece[gridSz][gridSz];
+        clone.activePieces = new HashMap<Piece, int[]>();
+        clone.validMoves = new ArrayList<Move>();
+        for(int i = 0; i<gridSz; i++)
+            for(int j = 0; j<gridSz; j++){
+                if(board[i][j] != null){
+                    Piece clonePiece = board[i][j].copy();
+                    clone.changePiecePosition(clonePiece, null, new int[]{i, j});
+                }
+            }
+        clone.setPlayer(currentPlayerColor);
+        //clone winning color
+        clone.winningColor = winningColor;
+        return clone;
     }
     
     //draw function to be called with x, y bounds of drawing space and boolean of whether white is front.
@@ -105,9 +127,14 @@ class Game{
     
     //drawing highlighted pieces and cells
     private void drawHighlights(){        //TODO highlight multijumps differently
-        
+        try{
         for(Move move : validMoves){
+            if(move.from == null) print("wtf");
             board[move.from[0]][move.from[1]].highlight(availableMoveColor, false);
+        }
+        } catch (Exception e){
+            println("error");
+            //e.printStackTrace();
         }
         
         if(highlightedPiece == null) return;

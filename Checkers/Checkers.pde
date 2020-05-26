@@ -140,6 +140,10 @@ void keyPressed(){
         game.winningColor = COLOR.LIGHT;
         changeState(STATE.FINISHED, 0);
     }
+    else if(key == 'c'){
+        game = game.copy();
+        println("copied");
+    }
     
     if(key == ESC){
         key = 0;
