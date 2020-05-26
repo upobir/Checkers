@@ -34,3 +34,16 @@ public enum STATE{
 public enum BOXTYPE{
     TEXTONLY, BUTTON
 }
+
+public enum OPPONENT{
+    PLAYER("Player"), AI("Computer");
+    
+    String string;
+    private OPPONENT(String string){
+        this.string = string;
+    }
+    
+    public String toString(){
+        return this.string;
+    }
+}

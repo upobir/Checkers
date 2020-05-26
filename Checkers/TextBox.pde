@@ -3,6 +3,7 @@ class TextBox{
     float xlo, ylo, xhi, yhi; 
     int timer;
     String showText;
+    String newText;
     final color buttonColor = color(132, 54, 161);
     final color activatedColor = color(106, 18, 146);
     
@@ -18,6 +19,12 @@ class TextBox{
     
     //draw text box
     public void draw(float cx, float cy, float boxWidth, float boxHeight){
+        
+        if(timer == 0 && newText != null){
+            this.showText = newText;
+            newText = null;
+        }
+        
         xlo = cx - boxWidth/2;
         ylo = cy - boxHeight/2;
         xhi = cx + boxWidth/2;
@@ -40,6 +47,11 @@ class TextBox{
         text(showText, cx, cy);
         
         if(timer > 0) timer--;
+    }
+    
+    public void changeText(String string, int delay){
+        newText = string;
+        timer += delay;
     }
     
     public boolean clickedOn(float mx, float my){

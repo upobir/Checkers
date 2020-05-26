@@ -8,10 +8,11 @@ import java.util.*;
 //// Think of this as main class
 //// class Main{
     
-final int animationUnit = 10;
+final int animationUnit = 8;
     
     
 Game game;
+OPPONENT opponent;
 float boardSz; //board size for drawing
 STATE curState;
 STATE nxtState;
@@ -35,9 +36,12 @@ void updateState(){
     if(nxtState == null) return;
     
     if(nxtState == STATE.SETUP){
-        game =  new Game();    
+        game =  new Game();   
+        opponent = OPPONENT.PLAYER;
         menuBox = new MenuBox(true, 1, 1, 1, 3);
         menuBox.set(0, 0, "Choose Mode", BOXTYPE.TEXTONLY);
+        menuBox.set(1, 0, "", BOXTYPE.TEXTONLY);
+        menuBox.set(2, 0, "VS Player", BOXTYPE.BUTTON);
         menuBox.set(3, 1, "Start Game", BOXTYPE.BUTTON);
     }
     else if(nxtState == STATE.PLAYING){
@@ -87,6 +91,17 @@ void mousePressed(){
             int[] clicked = menuBox.interactMouse(mouseX, mouseY);
             if(Arrays.equals(clicked, new int[]{3, 1})){
                 changeState(STATE.PLAYING, 2*animationUnit);
+            }
+            else if(Arrays.equals(clicked, new int[]{2, 0})){
+                if(opponent == OPPONENT.PLAYER) {
+                    opponent = OPPONENT.AI;
+                    menuBox.changeText(1, 0, "Right click to choose your side", animationUnit);
+                }
+                else{
+                    opponent = OPPONENT.PLAYER;
+                    menuBox.changeText(1, 0, "", animationUnit);
+                }
+                menuBox.changeText(2, 0, "VS " + opponent.toString(), 0);
             }
         }
     }

@@ -28,6 +28,15 @@ class MenuBox{
         }
     }
     
+    public void changeText(int i, int j, String string, int delay){
+        try{
+            if(boxes[i][j] == null) return;
+            boxes[i][j].changeText(string, delay);
+        } catch (ArrayIndexOutOfBoundsException e){
+            e.printStackTrace();
+        }
+    }
+    
     //drawing function given center coordinate and full width and indiv. row height
     public void draw(float cx, float cy, float menuWidth, float menuRowHeight){
         float menuHeight = menuRowHeight * boxes.length;
