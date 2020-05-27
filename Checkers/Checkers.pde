@@ -8,11 +8,12 @@ import java.util.*;
 //// Think of this as main class
 //// class Main{
     
-final int animationUnit = 8;
+final int animationUnit = 6;
     
     
 Game game;
 OPPONENT opponent;
+GameAI com;
 float boardSz; //board size for drawing
 STATE curState;
 STATE nxtState;
@@ -38,6 +39,7 @@ void updateState(){
     if(nxtState == STATE.SETUP){
         game =  new Game();   
         opponent = OPPONENT.PLAYER;
+        com = new GameAI();
         menuBox = new MenuBox(true, 1, 1, 1, 3);
         menuBox.set(0, 0, "Choose Mode", BOXTYPE.TEXTONLY);
         menuBox.set(1, 0, "", BOXTYPE.TEXTONLY);
@@ -84,6 +86,9 @@ void mousePressed(){
     
     if(mouseButton == RIGHT){
         game.flipView();
+        if(opponent == OPPONENT.AI){
+            com.setColor((game.whiteFront)? COLOR.DARK : COLOR.LIGHT);
+        }
         return;
     }
     if(curState == STATE.SETUP){
@@ -95,18 +100,22 @@ void mousePressed(){
             else if(Arrays.equals(clicked, new int[]{2, 0})){
                 if(opponent == OPPONENT.PLAYER) {
                     opponent = OPPONENT.AI;
+                    com.setColor((game.whiteFront)? COLOR.DARK : COLOR.LIGHT);
                     menuBox.changeText(1, 0, "Right click to choose your side", animationUnit);
                 }
                 else{
                     opponent = OPPONENT.PLAYER;
+                    com.setColor(null);
                     menuBox.changeText(1, 0, "", animationUnit);
                 }
                 menuBox.changeText(2, 0, "VS " + opponent.toString(), 0);
             }
         }
     }
-    else if(curState == STATE.PLAYING){   
+    else if(curState == STATE.PLAYING){
         if(menuBox == null || !menuBox.isActive){
+            if(opponent == OPPONENT.AI && game.currentPlayerColor == com.playingColor)
+                return;
             boolean interaction = game.interactMouse(mouseX, mouseY);
              if(interaction && game.winningColor != null){
                  changeState(STATE.FINISHED, animationUnit*4);
