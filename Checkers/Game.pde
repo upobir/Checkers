@@ -11,7 +11,7 @@ class Game{
     //game variables
     Piece board[][];
     Map<Piece, int[]> activePieces;        //TODO maybe set this to different maps for different colors?
-    COLOR currentPlayerColor;
+    COLOR currentPlayingColor;
     ArrayList<Move> validMoves;
     COLOR winningColor;
     
@@ -62,7 +62,7 @@ class Game{
                     clone.changePiecePosition(clonePiece, null, new int[]{i, j});
                 }
             }
-        clone.setPlayer(currentPlayerColor);
+        clone.setPlayer(currentPlayingColor);
         //clone winning color
         clone.winningColor = winningColor;
         return clone;
@@ -86,7 +86,7 @@ class Game{
     //draws board given bounding box
     private void drawBoard(){
         rectMode(CORNERS);
-        fill(currentPlayerColor.drawColor);
+        fill(currentPlayingColor.drawColor);
         noStroke();
         rect(xlo - borderSpace, ylo - borderSpace, xhi + borderSpace, yhi + borderSpace);
         
@@ -197,10 +197,10 @@ class Game{
     //setiing current playing side.
     private void setPlayer(COLOR side){
         if(winningColor != null) return;
-        currentPlayerColor = side;
+        currentPlayingColor = side;
         computeValidMoves();
         if(validMoves.isEmpty()){
-            winningColor = currentPlayerColor.opposite();
+            winningColor = currentPlayingColor.opposite();
         }
     }
     
@@ -209,7 +209,7 @@ class Game{
         if(winningColor != null) return;
         validMoves.clear();
         for(Map.Entry<Piece, int[]> entry: activePieces.entrySet()){
-            if(entry.getKey().pieceColor != currentPlayerColor) continue;
+            if(entry.getKey().pieceColor != currentPlayingColor) continue;
             
             int i = entry.getValue()[0], j = entry.getValue()[1];
             List<Move> movesForPiece = entry.getKey().getMoves(board, i, j);
@@ -240,6 +240,7 @@ class Game{
         return ret;
     }
     
+    
     //interact with mouse press
     public boolean interactMouse(float mx, float my){
         if(winningColor != null) return false;
@@ -256,6 +257,12 @@ class Game{
         int i = Math.round(y-0.5+0.001);
         //[i][j] is the cell clicked on 
         
+        return interactCell(i, j);
+        
+        
+    }
+    
+    public boolean interactCell(int i, int j){
         Piece cellPiece = board[i][j];
         
         if(cellPiece != null){        //if the cell we clicked on, had a piece on it
@@ -263,7 +270,7 @@ class Game{
                 highlightedPiece = null;
                 return true;
             }
-            else if(cellPiece.pieceColor == currentPlayerColor && !getValidMovesFor(cellPiece).isEmpty()){ 
+            else if(cellPiece.pieceColor == currentPlayingColor && !getValidMovesFor(cellPiece).isEmpty()){ 
                 highlightedPiece = cellPiece;
                 return true;
             }
@@ -312,7 +319,7 @@ class Game{
         }
         
         if(validMoves.isEmpty()){
-            if(currentPlayerColor == COLOR.LIGHT) setPlayer(COLOR.DARK);
+            if(currentPlayingColor == COLOR.LIGHT) setPlayer(COLOR.DARK);
             else                                  setPlayer(COLOR.LIGHT);
         }
         
@@ -341,7 +348,7 @@ class Game{
             setPlayer(prvPlayerColor);
         }
         else{
-            currentPlayerColor = prvPlayerColor;
+            currentPlayingColor = prvPlayerColor;
         }
         
         // DEBUG code

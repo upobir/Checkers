@@ -39,7 +39,7 @@ void updateState(){
     if(nxtState == STATE.SETUP){
         game =  new Game();   
         opponent = OPPONENT.PLAYER;
-        com = new GameAI();
+        com = new GameAI(5*animationUnit);
         menuBox = new MenuBox(true, 1, 1, 1, 3);
         menuBox.set(0, 0, "Choose Mode", BOXTYPE.TEXTONLY);
         menuBox.set(1, 0, "", BOXTYPE.TEXTONLY);
@@ -52,7 +52,16 @@ void updateState(){
     }
     else if(nxtState == STATE.FINISHED){
         menuBox = new MenuBox(true, 0, 1, 0, 3);
-        String winningText = game.winningColor.toString() + " won!";
+        String winningText;
+        if(opponent == OPPONENT.PLAYER){
+            winningText = game.winningColor.toString() + " won!";
+        }
+        else{
+            if(com.playingColor == game.winningColor)
+                winningText = "Computer won!";
+            else
+                winningText = "You won";
+        }
         menuBox.set(1, 0, winningText, BOXTYPE.TEXTONLY);
         menuBox.set(3, 1, "Start New Game", BOXTYPE.BUTTON);
     }
@@ -63,6 +72,18 @@ void updateState(){
 // make drawing dependant on states?
 void draw(){
     if(clk == 0) updateState();
+    if(clk == 0 && curState == STATE.PLAYING && game.winningColor != null){
+        changeState(STATE.FINISHED, 4*animationUnit);
+    }
+    
+    if((menuBox == null || !menuBox.isActive) &&
+        opponent == OPPONENT.AI && game.winningColor == null && game.currentPlayingColor == com.playingColor){
+        int[] pos = com.reply(game);
+        if(pos != null){
+            game.interactCell(pos[0], pos[1]);
+        }
+    }
+    
     background(25);
     
     float cx = width/2, cy = height/2;
@@ -114,12 +135,9 @@ void mousePressed(){
     }
     else if(curState == STATE.PLAYING){
         if(menuBox == null || !menuBox.isActive){
-            if(opponent == OPPONENT.AI && game.currentPlayerColor == com.playingColor)
+            if(opponent == OPPONENT.AI && game.currentPlayingColor == com.playingColor)
                 return;
             boolean interaction = game.interactMouse(mouseX, mouseY);
-             if(interaction && game.winningColor != null){
-                 changeState(STATE.FINISHED, animationUnit*4);
-             }
         }
         else if(menuBox != null && menuBox.isActive){
             int[] clicked = menuBox.interactMouse(mouseX, mouseY);
