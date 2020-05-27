@@ -44,7 +44,7 @@ class Game{
         winningColor = null;
         
         whiteFront = (startingColor == COLOR.LIGHT);
-        setPlayer(startingColor);
+        setPlayer(startingColor, null);
     }
     
     //return a logical copy of the game
@@ -62,7 +62,7 @@ class Game{
                     clone.changePiecePosition(clonePiece, null, new int[]{i, j});
                 }
             }
-        clone.setPlayer(currentPlayingColor);
+        clone.setPlayer(currentPlayingColor, null);
         //clone winning color
         clone.winningColor = winningColor;
         return clone;
@@ -195,24 +195,28 @@ class Game{
     }
     
     //setiing current playing side.
-    private void setPlayer(COLOR side){
+    private void setPlayer(COLOR nxtColor, Piece enforcedPiece){
         if(winningColor != null) return;
-        currentPlayingColor = side;
-        computeValidMoves();
+        currentPlayingColor = nxtColor;
+        computeValidMoves(enforcedPiece);
         if(validMoves.isEmpty()){
             winningColor = currentPlayingColor.opposite();
         }
     }
     
     //computing valid moves for current player.
-    private void computeValidMoves(){
+    private void computeValidMoves(Piece enforcedPiece){
         if(winningColor != null) return;
         validMoves.clear();
-        for(Map.Entry<Piece, int[]> entry: activePieces.entrySet()){
-            if(entry.getKey().pieceColor != currentPlayingColor) continue;
+        for(Map.Entry<Piece, int[]> entry: activePieces.entrySet()){        //this now computes moves for every piece, for heuristic computation, change this?
+            
             
             int i = entry.getValue()[0], j = entry.getValue()[1];
             List<Move> movesForPiece = entry.getKey().getMoves(board, i, j);
+            
+            if(entry.getKey().pieceColor != currentPlayingColor) continue;
+            if(enforcedPiece != null && enforcedPiece != entry.getKey()) continue;
+            
             validMoves.addAll(movesForPiece);
         }
         
@@ -309,18 +313,22 @@ class Game{
             move.isKingingMove = true;
         }
         
-        validMoves.clear();
+        boolean multijump = false;
         if(move.isCapturing() && !move.isKingingMove){            //check if multi-jump is possible, only when this move itself was jumping and piece was not kinged this move
             List<Move> moreMoves = movingPiece.getMoves(board, move.to[0], move.to[1]);
             for(Move newMove: moreMoves){
-                if(newMove.isCapturing())
-                    validMoves.add(newMove);
+                if(newMove.isCapturing()){
+                    multijump = true;
+                    break;
+                }
             }
         }
         
-        if(validMoves.isEmpty()){
-            if(currentPlayingColor == COLOR.LIGHT) setPlayer(COLOR.DARK);
-            else                                  setPlayer(COLOR.LIGHT);
+        if(multijump){
+            setPlayer(currentPlayingColor, movingPiece);
+        }
+        else{
+            setPlayer(currentPlayingColor.opposite(), null);
         }
         
         
@@ -331,6 +339,7 @@ class Game{
         return true;
     }
     
+    /*
     public void undoMove(Move move, COLOR prvPlayerColor, boolean hardUndo){
         if(winningColor != null) winningColor = null;
         Piece movingPiece = board[move.to[0]][move.to[1]];
@@ -356,6 +365,7 @@ class Game{
         lastColor = null;
         return;
     }
+    */
     
     //chaging piece position by inserting it, deleting it or just changing it.
     private void changePiecePosition(Piece piece, int[] from, int to[]){

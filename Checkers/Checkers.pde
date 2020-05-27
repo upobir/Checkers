@@ -107,7 +107,7 @@ void mousePressed(){
     
     if(mouseButton == RIGHT){
         game.flipView();
-        if(opponent == OPPONENT.AI){
+        if(opponent == OPPONENT.AI && curState == STATE.SETUP){
             com.setColor((game.whiteFront)? COLOR.DARK : COLOR.LIGHT);
         }
         return;
@@ -161,7 +161,7 @@ void keyPressed(){
     if(clk > 0) return;
     
     if(key == '\n') game.debugBoard();
-    else if(key == '\b' && game.lastMove != null) game.undoMove(game.lastMove, game.lastColor,true);        // DEBUG code
+    //else if(key == '\b' && game.lastMove != null) game.undoMove(game.lastMove, game.lastColor,true);        // DEBUG code
     else if(key == 'l'){ 
         // DEBUG code
         game.winningColor = COLOR.LIGHT;
