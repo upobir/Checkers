@@ -161,15 +161,13 @@ void keyPressed(){
     if(clk > 0) return;
     
     if(key == '\n') game.debugBoard();
-    //else if(key == '\b' && game.lastMove != null) game.undoMove(game.lastMove, game.lastColor,true);        // DEBUG code
     else if(key == 'l'){ 
         // DEBUG code
         game.winningColor = COLOR.LIGHT;
         changeState(STATE.FINISHED, 0);
     }
-    else if(key == 'c'){
-        game = game.copy();
-        println("copied");
+    else if(key == 'h'){
+        println(game.heuristic);
     }
     
     if(key == ESC){

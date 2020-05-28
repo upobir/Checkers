@@ -15,6 +15,9 @@ class Game{
     ArrayList<Move> validMoves;
     COLOR winningColor;
     
+    // Algorithm variables
+    int heuristic;
+    
     //drawing variables
     float xlo, ylo, xhi, yhi;
     boolean whiteFront;
@@ -22,10 +25,6 @@ class Game{
     
     //IO variables
     Piece highlightedPiece;
-    
-    // DEBUG code
-    Move lastMove;
-    COLOR lastColor;
     
     Game(){
         board = new Piece[gridSz][gridSz];
@@ -198,6 +197,7 @@ class Game{
     private void setPlayer(COLOR nxtColor, Piece enforcedPiece){
         if(winningColor != null) return;
         currentPlayingColor = nxtColor;
+        heuristic = 0;
         computeValidMoves(enforcedPiece);
         if(validMoves.isEmpty()){
             winningColor = currentPlayingColor.opposite();
@@ -210,9 +210,17 @@ class Game{
         validMoves.clear();
         for(Map.Entry<Piece, int[]> entry: activePieces.entrySet()){        //this now computes moves for every piece, for heuristic computation, change this?
             
-            
             int i = entry.getValue()[0], j = entry.getValue()[1];
+            heuristic += entry.getKey().heuristic(i, j);
+            int extraCaptureScore = (entry.getKey().pieceColor == currentPlayingColor)? 1 : 0;
+            
             List<Move> movesForPiece = entry.getKey().getMoves(board, i, j);
+            for(Move move : movesForPiece){
+                if(move.isCapturing())
+                    heuristic += entry.getKey().pieceColor.sign() * (8 + extraCaptureScore);
+                else
+                    heuristic += entry.getKey().pieceColor.sign() * 4;
+            }
             
             if(entry.getKey().pieceColor != currentPlayingColor) continue;
             if(enforcedPiece != null && enforcedPiece != entry.getKey()) continue;
@@ -330,11 +338,6 @@ class Game{
         else{
             setPlayer(currentPlayingColor.opposite(), null);
         }
-        
-        
-        // DEBUG code
-        lastMove = move;
-        lastColor = movingPiece.pieceColor;
         
         return true;
     }

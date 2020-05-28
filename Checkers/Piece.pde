@@ -24,6 +24,15 @@ class Piece{
         return clone;
     }
     
+    //heuristic function
+    public int heuristic(int i, int j){
+        int score = type.value;
+        if(type == TYPE.SOLDIER){
+            score += Math.abs(i-kingingRow);
+        }
+        return score * pieceColor.sign();
+    }
+    
     //to draw the pieces.
     public void draw(float x_, float y_, float cellSize){
         x = x_;

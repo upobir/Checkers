@@ -19,12 +19,22 @@ public enum COLOR{
         if(this == LIGHT) return DARK;
         else              return LIGHT;
     }
+    
+    public int sign(){
+        if(this == LIGHT) return 1;
+        else              return -1;
+    }
   
 }
 
 
 public enum TYPE{
-    SOLDIER, KING
+    SOLDIER(10), KING(20);
+    
+    int value;
+    private TYPE(int val){
+        this.value = val;
+    }
 }
 
 public enum STATE{
