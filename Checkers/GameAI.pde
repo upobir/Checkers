@@ -18,9 +18,15 @@ class GameAI{
         if(timer == 0){
             timer = delay;
             virtualGame = game.copy();
+            
             int moveCnt = virtualGame.validMoves.size();
             int chosenMoveIndex = (int) random(moveCnt);
             Move chosenMove = virtualGame.validMoves.get(chosenMoveIndex);
+            
+            /*
+            Move chosenMove = findBestMove()
+            */
+            
             clicks.add(chosenMove.from.clone());
             clicks.add(chosenMove.to.clone());
             return null;
@@ -40,5 +46,15 @@ class GameAI{
             timer--;
             return null;
         }
+    }
+    
+    Move findBestMove(){
+        AIisMaximimizing = (playingColor == COLOR.LIGHT);
+        if(virtualGame.validMoves.size() == 1){
+            return virtualGame.validMoves.get(0);
+        }
+        
+        List<Move> goodMoves = new LinkedList<Move>();
+        int bestVal = (AIisMaximizing)? Integer.MIN_VALUE : Integer.MAX_VALUE;
     }
 }

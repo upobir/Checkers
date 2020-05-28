@@ -64,6 +64,7 @@ class Game{
         clone.setPlayer(currentPlayingColor, null);
         //clone winning color
         clone.winningColor = winningColor;
+        clone.heuristic = heuristic;
         return clone;
     }
     
@@ -126,15 +127,9 @@ class Game{
     
     //drawing highlighted pieces and cells
     private void drawHighlights(){        //TODO highlight multijumps differently
-        try{
         for(Move move : validMoves){
             if(move.from == null) print("wtf");
             board[move.from[0]][move.from[1]].highlight(availableMoveColor, false);
-        }
-        } catch (Exception e){
-            println("error");
-            //e.printStackTrace();
-        }
         
         if(highlightedPiece == null) return;
         
@@ -201,6 +196,7 @@ class Game{
         computeValidMoves(enforcedPiece);
         if(validMoves.isEmpty()){
             winningColor = currentPlayingColor.opposite();
+            heuristic = 5000 * winningColor.sign(); 
         }
     }
     
@@ -306,8 +302,6 @@ class Game{
     //applying a move
     public boolean applyMove(Move move){
         if(winningColor != null) return false;
-        //TODO check if move is valid, inefficient?
-        if(!validMoves.contains(move)) return false;
         
         Piece movingPiece = board[move.from[0]][move.from[1]];
         changePiecePosition(movingPiece, move.from, move.to);
@@ -342,11 +336,12 @@ class Game{
         return true;
     }
     
-    /*
-    public void undoMove(Move move, COLOR prvPlayerColor, boolean hardUndo){
+    //this is a soft undo, meaning that after the undo validMoves list will be not really valid.
+    public void softUndoMove(Move move, COLOR prvPlayerColor){
         if(winningColor != null) winningColor = null;
-        Piece movingPiece = board[move.to[0]][move.to[1]];
+        heuristic = 0;
         
+        Piece movingPiece = board[move.to[0]][move.to[1]];
         if(move.isKingingMove) movingPiece.changeType(TYPE.SOLDIER);
         
         changePiecePosition(movingPiece, move.to, move.from);
@@ -356,16 +351,7 @@ class Game{
             changePiecePosition(move.capturedPiece, null, capP);
         }
         
-        if(hardUndo){
-            setPlayer(prvPlayerColor);
-        }
-        else{
-            currentPlayingColor = prvPlayerColor;
-        }
-        
-        // DEBUG code
-        lastMove = null;
-        lastColor = null;
+        currentPlayingColor = prvPlayerColor;
         return;
     }
     */
