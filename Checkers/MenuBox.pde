@@ -20,9 +20,9 @@ class MenuBox{
     }
     
     //setting string to textBox at [i][j] with type
-    public void set(int i, int j, String string, BOXTYPE type){
+    public void set(int i, int j, String string, BOXTYPE type, TRIGGER trigger){
         try{
-            boxes[i][j] = new TextBox(string, type);
+            boxes[i][j] = new TextBox(string, type, trigger);
         } catch (ArrayIndexOutOfBoundsException e){
             e.printStackTrace();
         }
@@ -65,7 +65,7 @@ class MenuBox{
     }
     
     //interact with mouse
-    public int[] interactMouse(float mx, float my){
+    public TRIGGER interactMouse(float mx, float my){
         //if(!interactable) return null;
         if(mx != constrain(mx, xlo, xhi) || my != constrain(my, ylo, yhi)) return null;
         for(int i = 0; i<boxes.length; i++){
@@ -73,7 +73,7 @@ class MenuBox{
                 TextBox box = boxes[i][j];
                 if(box == null || box.type != BOXTYPE.BUTTON) continue;
                 if(box.clickedOn(mx, my)){
-                    return new int[]{i, j};
+                    return box.trigger;
                 }
             }
         }

@@ -41,14 +41,15 @@ void updateState(){
         opponent = OPPONENT.PLAYER;
         com = new GameAI(5*animationUnit);
         menuBox = new MenuBox(true, 1, 1, 1, 3);
-        menuBox.set(0, 0, "Choose Mode", BOXTYPE.TEXTONLY);
-        menuBox.set(1, 0, "", BOXTYPE.TEXTONLY);
-        menuBox.set(2, 0, "VS Player", BOXTYPE.BUTTON);
-        menuBox.set(3, 1, "Start Game", BOXTYPE.BUTTON);
+        menuBox.set(0, 0, "Choose Mode", BOXTYPE.TEXTONLY, null);
+        menuBox.set(1, 0, "", BOXTYPE.TEXTONLY, null);
+        menuBox.set(2, 0, "VS Player", BOXTYPE.BUTTON, TRIGGER.OPPONENTFLIP);
+        menuBox.set(3, 1, "Start Game", BOXTYPE.BUTTON, TRIGGER.STARTGAME);
     }
     else if(nxtState == STATE.PLAYING){
-        menuBox = new MenuBox(false, 0, 3, 0);
-        menuBox.set(1, 1, "Start New Game", BOXTYPE.BUTTON);
+        menuBox = new MenuBox(false, 1, 0, 3);
+        menuBox.set(0, 0, "You are playing: Player VS " +opponent.toString(), BOXTYPE.TEXTONLY, null);             
+        menuBox.set(2, 1, "Start New Game", BOXTYPE.BUTTON, TRIGGER.STARTMENU);
     }
     else if(nxtState == STATE.FINISHED){
         menuBox = new MenuBox(true, 0, 1, 0, 3);
@@ -62,8 +63,8 @@ void updateState(){
             else
                 winningText = "You won";
         }
-        menuBox.set(1, 0, winningText, BOXTYPE.TEXTONLY);
-        menuBox.set(3, 1, "Start New Game", BOXTYPE.BUTTON);
+        menuBox.set(1, 0, winningText, BOXTYPE.TEXTONLY, null);
+        menuBox.set(3, 1, "Start New Game", BOXTYPE.BUTTON, TRIGGER.STARTMENU);
     }
     curState = nxtState;
     nxtState = null;
@@ -114,11 +115,11 @@ void mousePressed(){
     }
     if(curState == STATE.SETUP){
         if(menuBox != null && menuBox.isActive){
-            int[] clicked = menuBox.interactMouse(mouseX, mouseY);
-            if(Arrays.equals(clicked, new int[]{3, 1})){
+            TRIGGER response = menuBox.interactMouse(mouseX, mouseY);
+            if(response == TRIGGER.STARTGAME){
                 changeState(STATE.PLAYING, 2*animationUnit);
             }
-            else if(Arrays.equals(clicked, new int[]{2, 0})){
+            else if(response == TRIGGER.OPPONENTFLIP){
                 if(opponent == OPPONENT.PLAYER) {
                     opponent = OPPONENT.AI;
                     com.setColor((game.whiteFront)? COLOR.DARK : COLOR.LIGHT);
@@ -137,19 +138,19 @@ void mousePressed(){
         if(menuBox == null || !menuBox.isActive){
             if(opponent == OPPONENT.AI && game.currentPlayingColor == com.playingColor)
                 return;
-            boolean interaction = game.interactMouse(mouseX, mouseY);
+            game.interactMouse(mouseX, mouseY);
         }
         else if(menuBox != null && menuBox.isActive){
-            int[] clicked = menuBox.interactMouse(mouseX, mouseY);
-            if(Arrays.equals(clicked, new int[]{1, 1})){
+            TRIGGER response = menuBox.interactMouse(mouseX, mouseY);
+            if(response == TRIGGER.STARTMENU){
                 changeState(STATE.SETUP, 2*animationUnit);
             }
         }
     }
     else if(curState == STATE.FINISHED){
         if(menuBox != null && menuBox.isActive){
-            int[] clicked = menuBox.interactMouse(mouseX, mouseY);
-            if(Arrays.equals(clicked, new int[]{3, 1})){
+            TRIGGER response = menuBox.interactMouse(mouseX, mouseY);
+            if(response == TRIGGER.STARTMENU){
                 changeState(STATE.SETUP, 2*animationUnit);
             }
         }

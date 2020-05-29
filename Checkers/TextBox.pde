@@ -9,11 +9,12 @@ class TextBox{
     
     // logical variables;
     BOXTYPE type;
+    TRIGGER trigger;
     
-   
-    TextBox(String showText, BOXTYPE type){
+    TextBox(String showText, BOXTYPE type, TRIGGER trigger){
         this.showText = showText;
         this.type = type;
+        this.trigger = trigger;
         //isActivated = false;
     }
     

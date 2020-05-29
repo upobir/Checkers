@@ -57,3 +57,7 @@ public enum OPPONENT{
         return this.string;
     }
 }
+
+public enum TRIGGER{
+    STARTMENU, STARTGAME, OPPONENTFLIP
+}
