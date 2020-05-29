@@ -2,8 +2,9 @@ class GameAI{
     COLOR playingColor;
     int delay, timer;
     Game virtualGame;
-    final int maxDepth = 2;
+    final int maxDepth = 8;
     Queue<int[]> clicks;
+    boolean oneFrameIgnore;
     
     GameAI(int delay){
         this.delay = delay;
@@ -15,8 +16,11 @@ class GameAI{
     }
     
     int[] reply(Game game){
-        
         if(timer == 0){
+            if(!oneFrameIgnore){
+                oneFrameIgnore = true;
+                return null;
+            }
             timer = delay;
             virtualGame = game.copy();
             
@@ -39,6 +43,7 @@ class GameAI{
             if(clicks.isEmpty()){
                 timer--;
                 virtualGame = null;
+                oneFrameIgnore = false;
             }
             else{
                 timer = delay;
@@ -82,7 +87,9 @@ class GameAI{
                 goodMoves.add(move);
             }
         }
-        return goodMoves.get(0);
+        int randomIndex = (int) random(goodMoves.size());
+        println(goodMoves.size());
+        return goodMoves.get(randomIndex);
     }
     
     private int backtrack(int depth, boolean maximizingPlayer){
