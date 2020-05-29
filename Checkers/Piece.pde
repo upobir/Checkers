@@ -28,7 +28,7 @@ class Piece{
     public int heuristic(int i, int j){
         int score = type.value;
         if(type == TYPE.SOLDIER){
-            score += Math.abs(i-kingingRow);
+            score += Math.abs(i-kingingRow)*2;
         }
         return score * pieceColor.sign();
     }

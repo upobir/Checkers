@@ -130,7 +130,7 @@ class Game{
         for(Move move : validMoves){
             if(move.from == null) print("wtf");
             board[move.from[0]][move.from[1]].highlight(availableMoveColor, false);
-        
+        }
         if(highlightedPiece == null) return;
         
         highlightedPiece.highlight(highlightColor, true);
@@ -354,7 +354,6 @@ class Game{
         currentPlayingColor = prvPlayerColor;
         return;
     }
-    */
     
     //chaging piece position by inserting it, deleting it or just changing it.
     private void changePiecePosition(Piece piece, int[] from, int to[]){

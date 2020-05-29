@@ -2,6 +2,7 @@ class GameAI{
     COLOR playingColor;
     int delay, timer;
     Game virtualGame;
+    final int maxDepth = 2;
     Queue<int[]> clicks;
     
     GameAI(int delay){
@@ -19,13 +20,15 @@ class GameAI{
             timer = delay;
             virtualGame = game.copy();
             
+            /*
             int moveCnt = virtualGame.validMoves.size();
             int chosenMoveIndex = (int) random(moveCnt);
             Move chosenMove = virtualGame.validMoves.get(chosenMoveIndex);
-            
-            /*
-            Move chosenMove = findBestMove()
             */
+            
+            
+            Move chosenMove = findBestMove();
+            
             
             clicks.add(chosenMove.from.clone());
             clicks.add(chosenMove.to.clone());
@@ -48,13 +51,60 @@ class GameAI{
         }
     }
     
-    Move findBestMove(){
-        AIisMaximimizing = (playingColor == COLOR.LIGHT);
-        if(virtualGame.validMoves.size() == 1){
-            return virtualGame.validMoves.get(0);
+    private Move findBestMove(){
+        boolean AIisMaximizing = (playingColor == COLOR.LIGHT);
+        
+        ArrayList<Move> validMoves = new ArrayList<Move>();
+        for(Move move : virtualGame.validMoves){
+            validMoves.add(move);
+        }
+        
+        if(validMoves.size() == 1){
+            return validMoves.get(0);
         }
         
         List<Move> goodMoves = new LinkedList<Move>();
         int bestVal = (AIisMaximizing)? Integer.MIN_VALUE : Integer.MAX_VALUE;
+        
+        COLOR currentColor = virtualGame.currentPlayingColor;
+        for(Move move : validMoves){
+            
+            virtualGame.applyMove(move);
+            int possibleVal = backtrack(1, !AIisMaximizing);
+            virtualGame.softUndoMove(move, currentColor);
+            
+            if((AIisMaximizing && possibleVal > bestVal) || (!AIisMaximizing && possibleVal < bestVal)){
+                bestVal = possibleVal;
+                goodMoves.clear();
+                goodMoves.add(move);
+            }
+            else if(possibleVal == bestVal){
+                goodMoves.add(move);
+            }
+        }
+        return goodMoves.get(0);
+    }
+    
+    private int backtrack(int depth, boolean maximizingPlayer){
+        if(depth == maxDepth || virtualGame.winningColor != null){
+            return virtualGame.heuristic;
+        }
+        ArrayList<Move> validMoves = new ArrayList<Move>();
+        for(Move move : virtualGame.validMoves){
+            validMoves.add(move);
+        }
+        int bestVal = (maximizingPlayer)? Integer.MIN_VALUE : Integer.MAX_VALUE;
+        
+        COLOR currentColor = virtualGame.currentPlayingColor;
+        for(Move move : validMoves){
+            virtualGame.applyMove(move);
+            int possibleVal = backtrack(depth+1, !maximizingPlayer);
+            virtualGame.softUndoMove(move, currentColor);
+            
+            if((maximizingPlayer && possibleVal > bestVal) || (!maximizingPlayer && possibleVal < bestVal)){
+                bestVal = possibleVal;
+            }
+        }
+        return bestVal;
     }
 }
