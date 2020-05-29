@@ -43,9 +43,10 @@ class TextBox{
         }
         
         fill(255);
-        textSize(32);
+        float scaleConst = 0.49;
+        textSize(boxHeight*scaleConst);
         textAlign(CENTER, CENTER);
-        text(showText, cx, cy);
+        text(showText, cx, cy-boxHeight*scaleConst/8.0);
         
         if(timer > 0) timer--;
     }
