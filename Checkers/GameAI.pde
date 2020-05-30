@@ -3,7 +3,7 @@ class GameAI{
     // logical variables; color of ai's side, copy of the virtual game, maximum depth of backtrack
     public COLOR playingColor;
     private Game virtualGame;
-    private final int maxDepth = 10;
+    private final int maxDepth = 9;
     
     // IO variables; delay done before interacting with the game, timer for that, queue of interacts, boolean to ignore first frame when ai is called
     // (this is to make sure the board is first drawn, before ai starts backtrack
