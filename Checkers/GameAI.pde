@@ -2,7 +2,7 @@ class GameAI{
     COLOR playingColor;
     int delay, timer;
     Game virtualGame;
-    final int maxDepth = 8;
+    final int maxDepth = 10;
     Queue<int[]> clicks;
     boolean oneFrameIgnore;
     
@@ -72,10 +72,11 @@ class GameAI{
         int bestVal = (AIisMaximizing)? Integer.MIN_VALUE : Integer.MAX_VALUE;
         
         COLOR currentColor = virtualGame.currentPlayingColor;
+        println(validMoves.size());
         for(Move move : validMoves){
-            
+            //println("checking move");
             virtualGame.applyMove(move);
-            int possibleVal = backtrack(1, !AIisMaximizing);
+            int possibleVal = backtrack(1, !AIisMaximizing, Integer.MIN_VALUE, Integer.MAX_VALUE);
             virtualGame.softUndoMove(move, currentColor);
             
             if((AIisMaximizing && possibleVal > bestVal) || (!AIisMaximizing && possibleVal < bestVal)){
@@ -88,11 +89,10 @@ class GameAI{
             }
         }
         int randomIndex = (int) random(goodMoves.size());
-        println(goodMoves.size());
         return goodMoves.get(randomIndex);
     }
     
-    private int backtrack(int depth, boolean maximizingPlayer){
+    private int backtrack(int depth, boolean maximizingPlayer, int alpha, int beta){
         if(depth == maxDepth || virtualGame.winningColor != null){
             return virtualGame.heuristic;
         }
@@ -105,12 +105,20 @@ class GameAI{
         COLOR currentColor = virtualGame.currentPlayingColor;
         for(Move move : validMoves){
             virtualGame.applyMove(move);
-            int possibleVal = backtrack(depth+1, !maximizingPlayer);
+            int possibleVal = backtrack(depth+1, !maximizingPlayer, alpha, beta);
             virtualGame.softUndoMove(move, currentColor);
             
             if((maximizingPlayer && possibleVal > bestVal) || (!maximizingPlayer && possibleVal < bestVal)){
                 bestVal = possibleVal;
             }
+            
+            if(maximizingPlayer)
+                alpha = Math.max(alpha, possibleVal);
+            else
+                beta = Math.min(beta, possibleVal);
+                
+            if(beta <= alpha)
+                break;
         }
         return bestVal;
     }

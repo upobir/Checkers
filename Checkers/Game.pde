@@ -128,7 +128,6 @@ class Game{
     //drawing highlighted pieces and cells
     private void drawHighlights(){        //TODO highlight multijumps differently
         for(Move move : validMoves){
-            if(move.from == null) print("wtf");
             board[move.from[0]][move.from[1]].highlight(availableMoveColor, false);
         }
         if(highlightedPiece == null) return;
@@ -196,7 +195,7 @@ class Game{
         computeValidMoves(enforcedPiece);
         if(validMoves.isEmpty()){
             winningColor = currentPlayingColor.opposite();
-            heuristic = 5000 * winningColor.sign(); 
+            heuristic = 500000 * winningColor.sign(); 
         }
     }
     
@@ -208,14 +207,14 @@ class Game{
             
             int i = entry.getValue()[0], j = entry.getValue()[1];
             heuristic += entry.getKey().heuristic(i, j);
-            int extraCaptureScore = (entry.getKey().pieceColor == currentPlayingColor)? 1 : 0;
+            int extraCaptureScore = (entry.getKey().pieceColor == currentPlayingColor)? 3 : 0;
             
             List<Move> movesForPiece = entry.getKey().getMoves(board, i, j);
             for(Move move : movesForPiece){
                 if(move.isCapturing())
-                    heuristic += entry.getKey().pieceColor.sign() * (8 + extraCaptureScore);
+                    heuristic += entry.getKey().pieceColor.sign() * (15 + extraCaptureScore);
                 else
-                    heuristic += entry.getKey().pieceColor.sign() * 4;
+                    heuristic += entry.getKey().pieceColor.sign() * 1;
             }
             
             if(entry.getKey().pieceColor != currentPlayingColor) continue;

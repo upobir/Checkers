@@ -29,7 +29,7 @@ public enum COLOR{
 
 
 public enum TYPE{
-    SOLDIER(20), KING(40);
+    SOLDIER(1000), KING(2000);
     
     int value;
     private TYPE(int val){
