@@ -13,6 +13,10 @@ class GameAI{
     
     public void setColor(COLOR playingColor){
         this.playingColor = playingColor;
+        timer = 0;
+        oneFrameIgnore = false;
+        virtualGame = null;
+        clicks.clear();
     }
     
     int[] reply(Game game){
