@@ -1,18 +1,18 @@
 // class textbox that will be in menubox, like buttons and texts 
 class TextBox{
     // drawing variables
-    float xlo, ylo, xhi, yhi;                         //drawing bounding box
-    final color buttonColor = color(132, 54, 161);    //color of normal button
-    final color activatedColor = color(106, 18, 146); //color of clicked button
-    int timer;                                        //animation delay counter for clicked button going back to normal
-    String showText, newText;                         //text that is shown and text that will be shown after animation
+    private float xlo, ylo, xhi, yhi;                         //drawing bounding box
+    private final color buttonColor = color(132, 54, 161);    //color of normal button
+    private final color activatedColor = color(106, 18, 146); //color of clicked button
+    private int timer;                                        //animation delay counter for clicked button going back to normal
+    private String showText, newText;                         //text that is shown and text that will be shown after animation
     
     // logical variables;
-    BOXTYPE type;        //type of textbox
-    TRIGGER trigger;     //returned trigger
+    public BOXTYPE type;        //type of textbox
+    public TRIGGER trigger;     //returned trigger
     
     //constructed with type, textshown and trigger
-    TextBox(String showText, BOXTYPE type, TRIGGER trigger){
+    public TextBox(String showText, BOXTYPE type, TRIGGER trigger){
         this.showText = showText;
         this.type = type;
         this.trigger = trigger;
@@ -51,12 +51,15 @@ class TextBox{
         text(showText, cx, cy-boxHeight*scaleConst/8.0);         //draw the text at center.
         
         if(timer > 0) timer--;            //update timer
+        return;
     }
     
-    //schedule a change of text with given delay. This is mainly for textonly boxes that will work in tandem with buttons
-    public void changeText(String string, int delay){
+    //schedule a change of text with given addeddelay. This is mainly for textonly boxes that will work in tandem with buttons
+    //this delay is added to already present delay
+    public void changeText(String string, int addedDelay){
         newText = string;
-        timer += delay;
+        timer += addedDelay;
+        return;
     }
     
     //check if mx, my that is mouse click coordinates were on this, if they were turn timer on for buttonColor animation

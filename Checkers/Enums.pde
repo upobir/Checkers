@@ -8,7 +8,7 @@ public enum COLOR{
     
     LIGHT(255<<24 | 255<<16 | 249<<8 | 244), DARK(255<<24 | 196<<16 | 0<<8 | 3);        //using integer masked color because enum won't allow color static, for values see above comment
     
-    color drawColor;            //color
+    public color drawColor;            //color
  
     private COLOR(color drawColor){
         this.drawColor = drawColor;
@@ -36,9 +36,9 @@ public enum COLOR{
 
 //enum for piece type.
 public enum TYPE{
-    SOLDIER(1000), KING(2000);
+    SOLDIER(1000), KING(3000);
     
-    int value;    //value in heuristic
+    public int value;    //value in heuristic
     
     private TYPE(int val){
         this.value = val;
@@ -59,7 +59,7 @@ public enum BOXTYPE{
 public enum OPPONENT{
     PLAYER("Player"), AI("Computer");
     
-    String string;        //string that will be shown in menu
+    public String string;        //string that will be shown in menu
     
     private OPPONENT(String string){
         this.string = string;

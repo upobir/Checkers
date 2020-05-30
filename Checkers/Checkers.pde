@@ -26,12 +26,14 @@ void setup(){
     background(50);
     surface.setResizable(true);    // the screen can be resized
     changeState(STATE.SETUP, 0);   // start with setup state
+    return;
 }
 
 // function that schedules a change of state
 void changeState(STATE newState, int timer){
     clk = timer;
     nxtState = newState;
+    return;
 }
 
 // function that is called every frame to make any scheduled changes to state
@@ -70,6 +72,7 @@ void updateState(){
     }
     curState = nxtState;
     nxtState = null;
+    return;
 }
 
 // drawing every frame, first checks for any change to state, then asks ai if it's ai's turn, then draws everything.
@@ -102,6 +105,7 @@ void draw(){
         menuBox.draw(cx, cy, menuWidth, menuRowHeight);
     }
     if(clk > 0) clk--;                        //update timer
+    return;
 }
 
 // event handling where mouse is pressed.
@@ -157,7 +161,7 @@ void mousePressed(){
             }
         }
     }
-    
+    return;
 }
 
 void keyPressed(){
@@ -173,6 +177,7 @@ void keyPressed(){
             com.setColor(com.playingColor.opposite());
         }
     }
+    return;
 }
 
 

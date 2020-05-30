@@ -195,7 +195,7 @@ class Game{
         computeValidMoves(enforcedPiece);
         if(validMoves.isEmpty()){
             winningColor = currentPlayingColor.opposite();
-            heuristic = 500000 * winningColor.sign(); 
+            //heuristic = 5000000 * winningColor.sign(); 
         }
     }
     
